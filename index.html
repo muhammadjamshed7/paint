@@ -1355,55 +1355,13 @@
                         <h3 class="text-xl font-bold mb-6 text-primary">Select Date & Time</h3>
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Available Dates</label>
-                            <div class="grid grid-cols-7 gap-2 mb-4">
-                                <div class="text-center font-medium text-gray-500 py-2">Sun</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Mon</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Tue</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Wed</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Thu</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Fri</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Sat</div>
-                                
-                                <!-- Calendar days will be populated by JavaScript -->
-                                <div class="text-center py-2 text-gray-400">29</div>
-                                <div class="text-center py-2 text-gray-400">30</div>
-                                <div class="text-center py-2 text-gray-400">31</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">1</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">2</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">3</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">4</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">5</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">6</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">7</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">8</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">9</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">10</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">11</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">12</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">13</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">14</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">15</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">16</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">17</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">18</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">19</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">20</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">21</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">22</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">23</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">24</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">25</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">26</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">27</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">28</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">29</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">30</div>
-                                <div class="text-center py-2 text-gray-400">1</div>
-                                <div class="text-center py-2 text-gray-400">2</div>
-                                <div class="text-center py-2 text-gray-400">3</div>
-                                <div class="text-center py-2 text-gray-400">4</div>
-                                <div class="text-center py-2 text-gray-400">5</div>
-                                <div class="text-center py-2 text-gray-400">6</div>
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <button id="calendar-prev" class="px-3 py-1 rounded bg-white text-gray-700 hover:bg-gray-100">&lt;</button>
+                                    <div id="calendar-month-year" class="font-medium text-gray-700"></div>
+                                    <button id="calendar-next" class="px-3 py-1 rounded bg-white text-gray-700 hover:bg-gray-100">&gt;</button>
+                                </div>
+                                <div id="calendar" class="grid grid-cols-7 gap-2 text-center"></div>
                             </div>
                         </div>
                         
@@ -2238,24 +2196,37 @@
         function updateStepper(active) {
             const headers = document.querySelectorAll('.p-6 .flex.mb-6 > div');
             headers.forEach((h, idx) => {
-                const circle = h.querySelector('div.w-8');
-                const label = h.querySelector('span');
-                if (idx < active) {
-                    // completed
-                    circle.classList.remove('bg-gray-200','text-gray-600');
-                    circle.classList.add('bg-accent','text-primary');
-                    if (label) label.classList.remove('text-gray-600');
-                    if (label) label.classList.add('text-primary');
-                } else if (idx === active) {
-                    circle.classList.remove('bg-gray-200','text-gray-600');
-                    circle.classList.add('bg-accent','text-primary');
-                    if (label) label.classList.remove('text-gray-600');
-                    if (label) label.classList.add('text-primary');
+                // Toggle the bottom border on the header wrapper so the yellow underline moves
+                if (idx <= active) {
+                    h.classList.remove('border-gray-200');
+                    h.classList.add('border-accent');
                 } else {
-                    circle.classList.remove('bg-accent','text-primary');
-                    circle.classList.add('bg-gray-200','text-gray-600');
-                    if (label) label.classList.remove('text-primary');
-                    if (label) label.classList.add('text-gray-600');
+                    h.classList.remove('border-accent');
+                    h.classList.add('border-gray-200');
+                }
+
+                // Target the circular step element more robustly and the label
+                const circle = h.querySelector('.rounded-full');
+                const label = h.querySelector('span');
+
+                if (circle) {
+                    if (idx <= active) {
+                        circle.classList.remove('bg-gray-200','text-gray-600');
+                        circle.classList.add('bg-accent','text-primary');
+                    } else {
+                        circle.classList.remove('bg-accent','text-primary');
+                        circle.classList.add('bg-gray-200','text-gray-600');
+                    }
+                }
+
+                if (label) {
+                    if (idx <= active) {
+                        label.classList.remove('text-gray-600');
+                        label.classList.add('text-primary');
+                    } else {
+                        label.classList.remove('text-primary');
+                        label.classList.add('text-gray-600');
+                    }
                 }
             });
         }
@@ -2425,17 +2396,94 @@
             });
         });
 
-        // Calendar date selection in Step 3
+        // Calendar rendering & selection for Step 3
         const bookingDateEl = document.getElementById('booking-date');
-        // select clickable date cells (have cursor-pointer or hover:bg class)
-        const dateCells = document.querySelectorAll('#step-3 .grid.grid-cols-7 .cursor-pointer, #step-3 .grid.grid-cols-7 .hover\\:bg-gray-100');
-        dateCells.forEach(cell => {
-            cell.addEventListener('click', () => {
-                dateCells.forEach(c => c.classList.remove('bg-accent','text-white'));
-                cell.classList.add('bg-accent','text-white');
-                if (bookingDateEl) bookingDateEl.textContent = cell.textContent.trim();
+        (function setupCalendar(){
+            const calendarEl = document.getElementById('calendar');
+            const monthYearEl = document.getElementById('calendar-month-year');
+            const prevBtn = document.getElementById('calendar-prev');
+            const nextBtn = document.getElementById('calendar-next');
+
+            if (!calendarEl || !monthYearEl) return;
+
+            const today = new Date();
+            let viewYear = today.getFullYear();
+            let viewMonth = today.getMonth(); // 0-indexed
+
+            function render() {
+                calendarEl.innerHTML = '';
+                const firstOfMonth = new Date(viewYear, viewMonth, 1);
+                const lastOfMonth = new Date(viewYear, viewMonth + 1, 0);
+                const startDay = firstOfMonth.getDay(); // 0 (Sun) - 6 (Sat)
+
+                // header weekdays
+                const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                days.forEach(d => {
+                    const hd = document.createElement('div');
+                    hd.className = 'text-center font-medium text-gray-500 py-2';
+                    hd.textContent = d;
+                    calendarEl.appendChild(hd);
+                });
+
+                // empty slots before first day
+                for (let i = 0; i < startDay; i++) {
+                    const empty = document.createElement('div');
+                    empty.className = 'text-center py-2 text-gray-300';
+                    calendarEl.appendChild(empty);
+                }
+
+                // days of month
+                for (let d = 1; d <= lastOfMonth.getDate(); d++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'text-center py-2 rounded-full cursor-pointer hover:bg-gray-100';
+                    cell.textContent = d;
+
+                    const cellDate = new Date(viewYear, viewMonth, d);
+                    // disable past dates
+                    if (cellDate.setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+                        cell.classList.remove('cursor-pointer','hover:bg-gray-100');
+                        cell.classList.add('text-gray-400','opacity-50');
+                        cell.title = 'Unavailable';
+                    } else {
+                        cell.addEventListener('click', () => {
+                            // clear previous selection
+                            calendarEl.querySelectorAll('.bg-accent').forEach(c => c.classList.remove('bg-accent','text-white'));
+                            cell.classList.add('bg-accent','text-white');
+                            // format booking date (e.g. 8 Sep 2025)
+                            const formatted = cellDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+                            if (bookingDateEl) bookingDateEl.textContent = formatted;
+                        });
+                    }
+
+                    calendarEl.appendChild(cell);
+                }
+
+                // show month and year
+                monthYearEl.textContent = firstOfMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+            }
+
+            prevBtn.addEventListener('click', () => {
+                // Don't allow navigating to months entirely in the past (if last day of month < today)
+                const prevMonth = new Date(viewYear, viewMonth - 1, 1);
+                const lastOfPrev = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0);
+                if (lastOfPrev.setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+                    // prevent navigating to full past months
+                    return;
+                }
+                viewMonth -= 1;
+                if (viewMonth < 0) { viewMonth = 11; viewYear -= 1; }
+                render();
             });
-        });
+
+            nextBtn.addEventListener('click', () => {
+                viewMonth += 1;
+                if (viewMonth > 11) { viewMonth = 0; viewYear += 1; }
+                render();
+            });
+
+            // initial render
+            render();
+        })();
 
         // Service details modal
         // Insert modal container at end of body
