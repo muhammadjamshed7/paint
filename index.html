@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light only">
     <title>Auxtreme Service LTD UK | Painting, Flooring, Cleaning & Decorating</title>
     <meta name="description" content="Professional home services across the UK including painting, flooring, cleaning and decorating. Residential & commercial specialists with guaranteed quality.">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,6 +29,11 @@
         }
     </script>
     <style>
+        /* Force light mode and prevent dark mode override */
+        :root {
+            color-scheme: light only;
+        }
+        
         /* Custom CSS for elements that need more styling */
         html {
             scroll-behavior: smooth;
@@ -381,28 +387,257 @@
         .form-icon { color: #9aa4b2; }
         #form-success { transition: all .18s ease; }
 
-        /* Logo tinting: force the paint-splash logo to appear yellow */
+        /* Site logo: use a real image file for navbar/footer */
         .site-logo {
-            width: 36px;
-            height: 36px;
             display: inline-block;
-            background-color: #ecc94b; /* solid yellow */
-            -webkit-mask-image: url('static/images/logo/paint-splash.png');
-            -webkit-mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            -webkit-mask-size: contain;
-            mask-image: url('static/images/logo/paint-splash.png');
-            mask-repeat: no-repeat;
-            mask-position: center;
-            mask-size: contain;
+            width: auto; /* preserve aspect ratio */
+            height: 32px; /* smaller base size */
+            background-image: url('static/images/logo/as-logo.png');
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            object-fit: contain; /* for img elements */
         }
         
         @media (min-width: 640px) {
             .site-logo {
-                width: 48px;
-                height: 48px;
+                height: 36px; /* reduced from 48px */
+                background-size: contain;
             }
+
+        /* Ensure img.site-logo behaves responsively */
+        img.site-logo {
+            display: inline-block;
+            height: 32px; /* reduced from 40px */
+            width: auto;
+            max-width: 120px; /* reduced max width */
+            vertical-align: middle;
+            object-fit: contain;
         }
+
+        @media (max-width: 640px) {
+            img.site-logo, .site-logo { height: 28px; } /* reduced from 34px */
+            /* slightly narrower fade and padding on small screens */
+            .fade-left, .fade-right { width: 40px; }
+            .reviews-slider-wrapper { padding-left: 8px; padding-right: 8px; }
+            .reviews-track { gap: 0.75rem; }
+            /* Mobile: show one review card per swipe */
+            .reviews-slider { overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
+            .reviews-track { gap: 0.75rem; }
+            /* Mobile: show full card content - remove text clamping */
+            .review-card { 
+                min-width: calc(100% - 48px); 
+                max-width: calc(100% - 48px);
+                margin: 0 auto;
+            }
+            .review-text {
+                display: block;
+                -webkit-line-clamp: unset;
+                -webkit-box-orient: unset;
+                overflow: visible;
+                line-clamp: unset;
+                white-space: normal;
+                word-wrap: break-word;
+                overflow-wrap: break-word;
+            }
+            .review-card { min-width: calc(100% - 48px); max-width: calc(100% - 48px); scroll-snap-align: center; }
+            /* hide the cloned track visually (JS will also disable cloning behavior for auto) */
+            .reviews-slider > .reviews-track + div + .reviews-track { display: none; }
+        }
+
+        @media (min-width: 640px) {
+            img.site-logo, .site-logo { height: 36px; } /* reduced from 48px */
+        }
+        }
+        /* Customer Reviews slider styles */
+        .reviews-section {
+            padding: 3rem 0;
+            background: linear-gradient(180deg,#ffffff,#f8fafc);
+        }
+
+        .reviews-slider-wrapper {
+            position: relative;
+            padding-left: 8px; /* prevent items being flush under fade */
+            padding-right: 8px;
+        }
+
+        .reviews-slider {
+            display: flex;
+            align-items: stretch;
+            overflow: hidden; /* outer is a flex row, track + clone sit side-by-side */
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 0.5rem;
+            gap: 0; /* gap handled inside each track */
+        }
+
+        .reviews-slider::-webkit-scrollbar { display: none; }
+        .reviews-slider { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .review-card {
+            min-width: 260px;
+            max-width: 360px;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #ffffff 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(15,23,42,0.08), 0 4px 16px rgba(15,23,42,0.04);
+            padding: 1.5rem 1.5rem 1.75rem 1.5rem;
+            flex: 0 0 auto;
+            scroll-snap-align: center;
+            transition: all .35s cubic-bezier(.2,.9,.2,1);
+            border: 1px solid rgba(99,102,241,0.06);
+            position: relative;
+            overflow: visible;
+            backdrop-filter: blur(10px);
+        }
+
+        .review-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            border-radius: 20px 20px 0 0;
+            opacity: 0.8;
+        }
+
+        .review-card::after {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(135deg, rgba(99,102,241,0.1) 0%, rgba(139,92,246,0.05) 50%, rgba(236,72,153,0.1) 100%);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity .35s ease;
+        }
+
+    /* top accent bar removed (kept for potential future use) */
+
+        /* inner track used for seamless cloning */
+        .reviews-track {
+            display: flex;
+            gap: 1rem;
+            will-change: transform;
+            align-items: stretch;
+            flex: none; /* don't shrink; we'll position tracks side-by-side */
+        }
+
+        /* cloned track should behave same as original */
+        .reviews-slider > .reviews-track + .reviews-track {
+            flex: none;
+        }
+
+        .review-card:hover { 
+            transform: translateY(-12px) scale(1.02); 
+            box-shadow: 0 32px 64px rgba(15,23,42,0.12), 0 16px 32px rgba(99,102,241,0.08);
+        }
+
+        .review-card:hover::after {
+            opacity: 1;
+        }
+
+        .review-header { 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+    /* decorative avatar removed to simplify cards */
+
+        .reviewer-name { 
+            font-weight: 800; 
+            color: #1e293b; 
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #1e293b 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .review-meta { 
+            font-size: .85rem; 
+            color: #64748b; 
+            font-weight: 500;
+        }
+        .review-service { 
+            font-size: .85rem; 
+            color: #1e293b; 
+            margin: .65rem 0 .8rem; 
+            display: inline-block; 
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); 
+            padding: 8px 14px; 
+            border-radius: 25px; 
+            border: 1px solid rgba(99,102,241,0.1); 
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+        }
+
+        .review-text { 
+            color: #475569; 
+            font-size: .98rem; 
+            line-height: 1.65; 
+            margin-top: .5rem;
+            font-weight: 400;
+        }
+        .stars { 
+            color: #f59e0b; 
+            font-weight: 700; 
+            letter-spacing: 1px; 
+            text-shadow: 0 1px 2px rgba(245,158,11,0.3);
+            filter: drop-shadow(0 1px 2px rgba(245,158,11,0.2));
+        }
+
+        /* subtle quote marker */
+        .review-text::before {
+            content: '“';
+            font-size: 2.8rem;
+            color: rgba(99,102,241,0.15);
+            position: absolute;
+            left: 18px;
+            top: 52px;
+            font-weight: 700;
+            pointer-events: none;
+            font-family: serif;
+            line-height: 1;
+        }
+
+        /* clamp long review text to 4 lines with ellipsis for neat cards */
+        .review-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            /* standardized newer property where supported */
+            line-clamp: 4;
+        }
+
+        /* subtle gradient fades at the edges to indicate scroll */
+        .fade-left, .fade-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 64px;
+            pointer-events: none;
+            z-index: 10;
+            /* subtle inset shadow to give depth and a smoother fade */
+            box-shadow: inset 20px 0 30px -20px rgba(2,6,23,0.06);
+        }
+        /* Left and right gradients mirror each other and include a soft shadow overlay */
+        .fade-left {
+            left: 0;
+            background: linear-gradient(90deg, rgba(248,250,252,1) 10%, rgba(248,250,252,0) 70%);
+            box-shadow: inset 20px 0 30px -20px rgba(2,6,23,0.06), 0 4px 12px rgba(2,6,23,0.02);
+        }
+        .fade-right {
+            right: 0;
+            background: linear-gradient(270deg, rgba(248,250,252,1) 10%, rgba(248,250,252,0) 70%);
+            box-shadow: inset -20px 0 30px -20px rgba(2,6,23,0.06), 0 4px 12px rgba(2,6,23,0.02);
+        }
+
     </style>
 </head>
 <body class="font-sans bg-gray-50">
@@ -421,7 +656,7 @@
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
                 <div class="flex items-center space-x-2 sm:space-x-3">
-                    <span class="site-logo" role="img" aria-label="Auxtreme Service LTD logo"></span>
+                    <img src="static/images/logo/as-logo.png" alt="Auxtreme Service LTD logo" class="site-logo" />
                     <span class="font-bold text-lg sm:text-xl">Auxtreme Service LTD</span>
                 </div>
                 
@@ -1641,6 +1876,251 @@
             </div>
         </div>
     </section>
+    
+    <!-- Customer Reviews Section -->
+    <section id="reviews" class="reviews-section">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-display font-bold text-center mb-4 section-heading">Customer Reviews</h2>
+            <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">Real feedback from our clients — honest, verified and recent.</p>
+
+            <div class="reviews-slider-wrapper">
+                <div class="fade-left"></div>
+                <div class="reviews-slider" id="reviewsSlider" aria-label="Customer reviews carousel">
+                    <!-- Cards -->
+                    <article class="review-card" role="article">
+                        <div class="review-header">
+                            <div class="reviewer-name">Joseph Mckenzie</div>
+                            <div class="review-meta">24 March 2025</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“I highly recommend Auxtreme services, Aamer and his team were able to work timely and finish a full interior paint job over the weekend putting in late hours to make sure our flat was ready for us. He provides a very professional service with a high attention detail and I couldn’t be more pleased with the results.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Sam</div>
+                            <div class="review-meta">17 February 2025</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“I reached out to Aamer to have my one-bedroom flat painted, and he responded promptly. He was able to complete the job over the weekend, and the quality of the work was excellent. More... ”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Amy Jamal</div>
+                            <div class="review-meta">25 January 2025</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“We would highly recommend working with Aamer and his team. He was able to take the work on quickly and did such an amazing job in a tight timeframe. More... ”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Jemma</div>
+                            <div class="review-meta">16 January 2025</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Professional and efficient service - booked for painting and decor and arrived timely completing the job and leaving no mess.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Karen</div>
+                            <div class="review-meta">30 September 2024</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aamer was really good at communicating with me and accommodating my needs and schedule as I’d just moved in. Really efficient paint job and pleased with the outcome.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Jasmine</div>
+                            <div class="review-meta">25 September 2024</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“I recommend Auxtreme Services. Thanks Aamer for your quick turnaround in painting the troughs for a high profile client. More... ”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Hannah</div>
+                            <div class="review-meta">31 August 2024</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Excellent painting job. Will use again and highly recommend.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Rosemary Abella</div>
+                            <div class="review-meta">17 August 2024</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Great communication and very quick to get the job done. One day between contact and having the work finished! Thank you :)”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Ellen</div>
+                            <div class="review-meta">26 July 2024</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aamer and his team did a fantastic job decorating our flat. They were respectful and tidy, and completed the work a day ahead of schedule. Would highly recommend.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Isabella Domville</div>
+                            <div class="review-meta">7 January 2024</div>
+                        </div>
+                        <div class="review-service">Handyman</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aemer and his colleague did a beautiful job wallpapering in my kitchen - the work was quick and efficient and I would ask them for any decorating service.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Gustavo P Zonta</div>
+                            <div class="review-meta">12 December 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“They did a really good service at our shop. They did all our basement in 2 days with repair as well.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Urban Baristas</div>
+                            <div class="review-meta">11 December 2023</div>
+                        </div>
+                        <div class="review-service">Commercial</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Its incredible results. Great service, time efficient, nice to work with. Will definitely use your service in the future.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Evie Woods</div>
+                            <div class="review-meta">24 November 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aamer and his team have recently carried out a month long job at our new commercial space, painting every single wall, skirting, hand rail and door and handle in sight accross our 4 story venue. More... ”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Sam Collins</div>
+                            <div class="review-meta">24 November 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Absoutely excellent and would highly recommend!”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Juliet</div>
+                            <div class="review-meta">5 September 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Great job. They were prompt, tidy and very friendly. Was done in a day and the finish was excellent. I'm definitely using their services again.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">L. Miner</div>
+                            <div class="review-meta">26 August 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“The service was very professional and friendly. Definitely would use them again and refer them to others.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Marko</div>
+                            <div class="review-meta">22 August 2023</div>
+                        </div>
+                        <div class="review-service">Handyman</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Excellent work. Very professional. Painting result looks marvellous.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Danielle Kirkwood</div>
+                            <div class="review-meta">16 August 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aamer and his colleague worked super hard and did a great job painting our kitchen and living room. They are also really lovely guys and nice to have around. I would definitely recommend them.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Evelyn</div>
+                            <div class="review-meta">12 August 2023</div>
+                        </div>
+                        <div class="review-service">House Cleaning</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Very professional, on time, flexible and Great Clean!”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Sandra</div>
+                            <div class="review-meta">6 August 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Great service - had them come in to give my flat a fresh coat of paint as I’d just moved in and didn’t want to unpack until painting was completed. They were efficient, quick, professional and friendly. Regular communication on status and to confirm I was happy with the job so far. Wouldn’t hesitate to use them again.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Gerard McKenna</div>
+                            <div class="review-meta">5 August 2023</div>
+                        </div>
+                        <div class="review-service">Painting &amp; Decoration - Interior</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Couldn't rate Aamer and the team highly enough. Friendly, communicative, quick and transparent - not to mention a great job done.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Cheryl</div>
+                            <div class="review-meta">29 July 2023</div>
+                        </div>
+                        <div class="review-service">House Cleaning</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“He did very good job. He was patient and very professional. I will recommend him any time.”</p>
+                    </article>
+
+                    <article class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-name">Gina</div>
+                            <div class="review-meta">25 June 2023</div>
+                        </div>
+                        <div class="review-service">House Cleaning</div>
+                        <div class="stars">★★★★★</div>
+                        <p class="review-text mt-3">“Aamer did a fantastic job cleaning my flat. He was Very polite, friendly and very thorough with the job. I’m very satisfied. I will definitely hire him again.”</p>
+                    </article>
+                </div>
+                <div class="fade-right"></div>
+            </div>
+        </div>
+    </section>
 
     <!-- Contact Form Section -->
     <section id="contact" class="py-16 bg-gray-100">
@@ -1789,7 +2269,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4 flex items-center">
-                        <span class="site-logo mr-2" role="img" aria-label="Auxtreme Service LTD logo"></span>Auxtreme Service LTD
+                        <img src="static/images/logo/as-logo.png" alt="Auxtreme Service LTD logo" class="site-logo mr-2"/>Auxtreme Service LTD
                     </h3>
                     <p class="mb-4">Professional home improvement services across the UK with guaranteed quality and customer satisfaction.</p>
                     <p>Covering England, Scotland, Wales and Northern Ireland.</p>
@@ -2913,6 +3393,103 @@
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
+        
+        // Reviews slider: seamless, smooth continuous scroll using a cloned track + transform
+        (function() {
+            const outer = document.getElementById('reviewsSlider');
+            if (!outer) return;
+
+            // detect mobile/reduced motion early
+            const disableAuto = window.matchMedia('(max-width: 640px)').matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // wrap the existing children into a track element
+            let track = outer.querySelector('.reviews-track');
+            if (!track) {
+                track = document.createElement('div');
+                track.className = 'reviews-track';
+                // move existing children into track
+                while (outer.firstChild) track.appendChild(outer.firstChild);
+                outer.appendChild(track);
+            }
+
+            // If auto-scrolling is allowed, clone the track to create a seamless loop
+            let clone = null;
+            if (!disableAuto) {
+                clone = track.cloneNode(true);
+                // compute gap between items from CSS (fallback to 16px)
+                let gapPx = 16;
+                try {
+                    const s = getComputedStyle(track);
+                    const gapVal = s.getPropertyValue('gap') || s.getPropertyValue('column-gap') || '16px';
+                    gapPx = parseFloat(gapVal) || gapPx;
+                } catch (e) {
+                    gapPx = 16;
+                }
+                // insert a spacer element between track and clone so content doesn't visually overlap
+                const spacer = document.createElement('div');
+                spacer.style.width = gapPx + 'px';
+                spacer.style.flex = 'none';
+                outer.appendChild(spacer);
+                clone.style.flex = 'none';
+                outer.appendChild(clone);
+            } else {
+                // mobile: enable native horizontal scrolling and snap
+                outer.style.overflowX = 'auto';
+                outer.style.WebkitOverflowScrolling = 'touch';
+            }
+
+            let isPaused = false;
+            const speed = 28; // px/s: slightly slower for smoothness
+
+            // Responsive: disable auto-scroll on small screens and if user prefers reduced motion
+            // (disableAuto already computed above)
+            let pos = 0; // current translateX (positive moving leftwards)
+            let last = performance.now();
+
+            function getTotalWidth() {
+                // width of original track
+                return track.getBoundingClientRect().width;
+            }
+
+            function step(now) {
+                const dt = now - last;
+                last = now;
+                if (!isPaused && !disableAuto) {
+                    pos += (speed * dt) / 1000;
+                    const total = getTotalWidth();
+                    if (pos >= total) {
+                        // wrap
+                        pos = pos - total;
+                    }
+                    // translate both tracks together
+                    const t = `translate3d(-${pos}px,0,0)`;
+                    track.style.transform = t;
+                    if (clone) clone.style.transform = t;
+                }
+                requestAnimationFrame(step);
+            }
+
+            // pause/resume handlers
+            ['mouseenter','focusin'].forEach(ev => outer.addEventListener(ev, () => isPaused = true));
+            ['mouseleave','focusout'].forEach(ev => outer.addEventListener(ev, () => isPaused = false));
+            outer.addEventListener('touchstart', () => isPaused = true, { passive: true });
+            outer.addEventListener('touchend', () => isPaused = false, { passive: true });
+            outer.addEventListener('pointerdown', () => isPaused = true);
+            outer.addEventListener('pointerup', () => isPaused = false);
+
+            // handle window resize (recompute widths)
+            window.addEventListener('resize', () => {
+                // recompute immediately to avoid jump
+                last = performance.now();
+            });
+
+            // set will-change for smoother animation
+            track.style.willChange = 'transform';
+            if (clone) clone.style.willChange = 'transform';
+
+            // For small screens we still want the content to be horizontally scrollable by users
+            if (!disableAuto) requestAnimationFrame(step);
+        })();
     </script>
 </body>
 </html>
