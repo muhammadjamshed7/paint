@@ -7,6 +7,9 @@
     <meta name="description" content="Professional home services across the UK including painting, flooring, cleaning and decorating. Residential & commercial specialists with guaranteed quality.">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -15,6 +18,10 @@
                         primary: '#1a365d',
                         secondary: '#2c5282',
                         accent: '#ecc94b',
+                    },
+                    fontFamily: {
+                        'display': ['Playfair Display', 'serif'],
+                        'sans': ['Inter', 'sans-serif'],
                     }
                 }
             }
@@ -22,25 +29,170 @@
     </script>
     <style>
         /* Custom CSS for elements that need more styling */
+        html {
+            scroll-behavior: smooth;
+        }
         .hero-banner {
             height: 80vh;
-            background-size: cover;
-            background-position: center;
             position: relative;
-            transition: background-image 1s ease-in-out;
+            overflow: hidden;
+        }
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1200ms ease-in-out;
+            -webkit-transition: opacity 1200ms ease-in-out;
+        }
+        .hero-slide.active { opacity: 1; }
+        
+        .service-card {
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
         }
         
         .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(236, 201, 75, 0.3);
+        }
+        
+        .service-card:hover::before {
+            left: 100%;
+        }
+        
+        .gallery-card {
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .gallery-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section-heading {
+            position: relative;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: fadeInUp 0.8s ease-out;
+            padding-bottom: 16px; /* Add padding to prevent g cutoff */
+        }
+        
+        .section-heading::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #ecc94b, #f6c84a);
+            border-radius: 2px;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+        
+        /* Before/After gallery image hover effects */
+        .before-after-image {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .before-after-image:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .before-after-image img {
+            transition: transform 0.6s ease;
+        }
+        
+        .before-after-image:hover img {
+            transform: scale(1.1);
+        }
+        
+        .before-after-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(236, 201, 75, 0.1), rgba(246, 200, 74, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .before-after-image:hover::after {
+            opacity: 1;
         }
         
         .color-swatch {
-            width: 40px;
-            height: 40px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             cursor: pointer;
             transition: transform 0.2s;
+        }
+        
+        @media (min-width: 640px) {
+            .color-swatch {
+                width: 40px;
+                height: 40px;
+            }
         }
         
         .color-swatch:hover {
@@ -107,17 +259,160 @@
             .service-card {
                 margin-bottom: 1.5rem;
             }
+            
+            /* Improve button touch targets on mobile */
+            button, .button {
+                min-height: 44px;
+            }
+            
+            /* Improve form inputs on mobile */
+            input, select, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            /* Better spacing for mobile */
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            /* Modal improvements for mobile */
+            .modal {
+                margin: 0.5rem;
+                max-width: calc(100vw - 1rem);
+            }
+        }
+        
+        /* Small mobile phones */
+        @media (max-width: 480px) {
+            .hero-banner h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-banner p {
+                font-size: 1.125rem;
+            }
+            
+            .text-4xl {
+                font-size: 2rem;
+            }
+            
+            .text-5xl {
+                font-size: 2.25rem;
+            }
+        }
+
+        /* Dropdown visual improvements */
+        .dropdown { position: relative; }
+        .dropdown-menu {
+            min-width: 14rem;
+            right: 0;
+            border: 1px solid rgba(0,0,0,0.06);
+            padding: 0.25rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 12px 30px rgba(2,6,23,0.08);
+            transition: transform .15s ease, opacity .12s ease;
+            transform-origin: top right;
+            z-index: 60;
+            background: #fff;
+        }
+        .dropdown-menu a { 
+            display: block; 
+            padding: 0.75rem 1rem; 
+            color: #1a365d; 
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border-radius: 0.375rem;
+            margin: 0 0.25rem;
+        }
+        .dropdown-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #ecc94b, #f6c84a);
+            transition: left 0.3s ease;
+            z-index: -1;
+            border-radius: 0.375rem;
+        }
+        .dropdown-menu a:hover { 
+            background: transparent;
+            color: #1a365d; 
+            transform: translateX(4px);
+        }
+        .dropdown-menu a:hover::before {
+            left: 0;
+        }
+        .dropdown .fa-chevron-down { transition: transform .18s ease; }
+        .dropdown.open .fa-chevron-down { transform: rotate(180deg); }
+
+        /* Mobile dropdown content tweaks */
+        .mobile-menu .dropdown-content { padding-left: 0.75rem; }
+        .mobile-menu .dropdown-content a { 
+            display:block; 
+            padding: 0.5rem 0; 
+            color: inherit; 
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .mobile-menu .dropdown-content a:hover { 
+            color: #ecc94b; 
+            transform: translateX(4px); 
+        }
+
+        /* Contact form improvements */
+        .form-input {
+            border: 1px solid #e6e9ee;
+            background: white;
+            padding: 0.75rem 0.75rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 6px 18px rgba(16,24,40,0.04);
+            transition: box-shadow .12s ease, transform .06s ease, border-color .12s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            box-shadow: 0 8px 28px rgba(16,24,40,0.08);
+            border-color: rgba(236,201,75,0.9); /* accent */
+            transform: translateY(-1px);
+        }
+        .form-icon { color: #9aa4b2; }
+        #form-success { transition: all .18s ease; }
+
+        /* Logo tinting: force the paint-splash logo to appear yellow */
+        .site-logo {
+            width: 36px;
+            height: 36px;
+            display: inline-block;
+            background-color: #ecc94b; /* solid yellow */
+            -webkit-mask-image: url('static/images/logo/paint-splash.png');
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            -webkit-mask-size: contain;
+            mask-image: url('static/images/logo/paint-splash.png');
+            mask-repeat: no-repeat;
+            mask-position: center;
+            mask-size: contain;
+        }
+        
+        @media (min-width: 640px) {
+            .site-logo {
+                width: 48px;
+                height: 48px;
+            }
         }
     </style>
 </head>
 <body class="font-sans bg-gray-50">
     <!-- WhatsApp Floating Button -->
     <a href="https://wa.me/923029015909?text=Hello,%20I%20would%20like%20to%20inquire%20about%20your%20services." 
-       class="whatsapp-float fixed bottom-8 right-8 bg-green-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-3xl z-50 shadow-lg hover:bg-green-600 transition-colors duration-300"
+       class="whatsapp-float fixed bottom-6 right-6 sm:bottom-8 sm:right-8 bg-green-500 text-white w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center text-2xl sm:text-3xl z-50 shadow-lg hover:bg-green-600 transition-colors duration-300"
        target="_blank">
         <i class="fab fa-whatsapp"></i>
     </a>
-    <div class="whatsapp-tooltip absolute right-20 bottom-4 bg-gray-800 text-white text-sm px-3 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="whatsapp-tooltip hidden sm:block absolute right-20 bottom-4 bg-gray-800 text-white text-sm px-3 py-1 rounded opacity-0 pointer-events-none transition-opacity duration-300">
         Call & Consultation
     </div>
 
@@ -125,9 +420,9 @@
     <nav class="bg-primary text-white shadow-lg sticky top-0 z-40">
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center py-4">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-home text-xl text-accent"></i>
-                    <span class="font-bold text-xl">Auxtreme Service LTD</span>
+                <div class="flex items-center space-x-2 sm:space-x-3">
+                    <span class="site-logo" role="img" aria-label="Auxtreme Service LTD logo"></span>
+                    <span class="font-bold text-lg sm:text-xl">Auxtreme Service LTD</span>
                 </div>
                 
                 <!-- Mobile menu button -->
@@ -147,10 +442,10 @@
                             Services <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="dropdown-menu absolute hidden bg-white text-gray-800 pt-2 shadow-xl rounded w-48">
-                            <a href="#painting" class="block px-4 py-2 hover:bg-gray-100">Painting</a>
-                            <a href="#flooring" class="block px-4 py-2 hover:bg-gray-100">Flooring</a>
-                            <a href="#cleaning" class="block px-4 py-2 hover:bg-gray-100">Cleaning</a>
-                            <a href="#decorating" class="block px-4 py-2 hover:bg-gray-100">Decorating</a>
+                            <a href="#painting-details" class="block px-4 py-2 hover:bg-gray-100">Painting</a>
+                            <a href="#flooring-details" class="block px-4 py-2 hover:bg-gray-100">Flooring</a>
+                            <a href="#cleaning-details" class="block px-4 py-2 hover:bg-gray-100">Cleaning</a>
+                            <a href="#decoration-details" class="block px-4 py-2 hover:bg-gray-100">Decoration</a>
                         </div>
                     </div>
                     <a href="#gallery" class="text-white hover:text-accent transition">Gallery</a>
@@ -162,15 +457,15 @@
             <!-- Mobile Menu (hidden by default) -->
             <div class="mobile-menu hidden md:hidden pb-4">
                 <a href="#" class="block py-2 text-white hover:text-accent">Home</a>
-                <div class="dropdown">
+                    <div class="dropdown">
                     <button class="w-full text-left py-2 text-white hover:text-accent flex justify-between items-center">
                         Services <i class="fas fa-chevron-down text-xs"></i>
                     </button>
                     <div class="dropdown-content hidden pl-4">
-                        <a href="#painting" class="block py-2 text-white hover:text-accent">Painting</a>
-                        <a href="#flooring" class="block py-2 text-white hover:text-accent">Flooring</a>
-                        <a href="#cleaning" class="block py-2 text-white hover:text-accent">Cleaning</a>
-                        <a href="#decorating" class="block py-2 text-white hover:text-accent">Decorating</a>
+                        <a href="#painting-details" class="block py-2 text-white hover:text-accent">Painting</a>
+                        <a href="#flooring-details" class="block py-2 text-white hover:text-accent">Flooring</a>
+                        <a href="#cleaning-details" class="block py-2 text-white hover:text-accent">Cleaning</a>
+                        <a href="#decoration-details" class="block py-2 text-white hover:text-accent">Decoration</a>
                     </div>
                 </div>
                 <a href="#gallery" class="block py-2 text-white hover:text-accent">Gallery</a>
@@ -181,11 +476,16 @@
     </nav>
 
     <!-- Hero Banner with rotating images -->
-    <div class="hero-banner bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80')]">
+    <div class="hero-banner">
+        <!-- Slides (keeps the two existing images and adds two more) -->
+        <img class="hero-slide active" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hero 1">
+        <img class="hero-slide" src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hero 2">
+    <img class="hero-slide" src="static/images/assets/Home%20Office/home-office-white.jpg" alt="Hero 3">
+        <img class="hero-slide" src="https://images.unsplash.com/photo-1488805990569-3c9e1d76d51c?auto=format&fit=crop&w=1470&q=80" alt="Hero 4">
         <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center">
             <div class="container mx-auto px-4 text-white">
-                <h1 class="text-4xl md:text-6xl font-bold mb-4">Transform Your Space</h1>
-                <p class="text-xl md:text-2xl mb-8">Professional painting, flooring, cleaning & decorating services across the UK</p>
+                <h1 class="text-4xl md:text-6xl font-display font-bold mb-4">Transform Your Space</h1>
+                <p class="text-xl md:text-2xl mb-8 font-sans">Professional painting, flooring, cleaning & decorating services across the UK</p>
                 <div class="flex flex-wrap gap-4">
                     <a href="#booking" class="bg-accent text-primary px-8 py-3 rounded font-bold hover:bg-yellow-500 transition">Book Consultation</a>
                     <a href="#contact" class="border-2 border-white text-white px-8 py-3 rounded font-bold hover:bg-white hover:text-primary transition">Get a Quote</a>
@@ -200,57 +500,104 @@
     <!-- Services Section -->
     <section id="services" class="py-16 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Our Services</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Our Services</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional home improvement services delivered with expertise, quality materials, and attention to detail across the UK</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <!-- Painting Service Card -->
-                <div id="painting" class="service-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Painting Services" class="w-full h-48 object-cover">
+                <div id="painting" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/images/painting/interior/paint_interior02.jpg" alt="Painting Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-primary">Painting Services</h3>
-                        <p class="text-gray-600 mb-4">Professional interior and exterior painting for homes and businesses across the UK.</p>
-                        <a href="#painting-details" class="text-accent font-medium hover:underline">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-paint-roller text-accent text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary">Painting Services</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4 leading-relaxed">Professional interior and exterior painting for homes and businesses across the UK.</p>
+                        <a href="#painting-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
+                            Learn More 
+                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- Flooring Service Card -->
-                <div id="flooring" class="service-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Flooring Services" class="w-full h-48 object-cover">
+                <div id="flooring" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-100">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/images/flooring/Engineered Wood Flooring/d5-render-KSljCphBZ6Q-unsplash.jpg" alt="Flooring Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-primary">Flooring Services</h3>
-                        <p class="text-gray-600 mb-4">Quality flooring installation including carpets, vinyl, laminate and wood flooring.</p>
-                        <a href="#flooring-details" class="text-accent font-medium hover:underline">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-th-large text-accent text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary">Flooring Services</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4 leading-relaxed">Quality flooring installation including carpets, vinyl, laminate and wood flooring.</p>
+                        <a href="#flooring-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
+                            Learn More 
+                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
                 
                 <!-- Cleaning Service Card -->
-               <!-- <div id="cleaning" class="service-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Cleaning Services" class="w-full h-48 object-cover">
+                <div id="cleaning" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-200">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/images/cleaning/Carpet Care/istockphoto-2214252212-612x612.webp" alt="Cleaning Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-primary">Cleaning Services</h3>
-                        <p class="text-gray-600 mb-4">Professional cleaning for homes, offices and end-of-tenancy with guaranteed results.</p>
-                        <a href="#cleaning-details" class="text-accent font-medium hover:underline">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-broom text-accent text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary">Cleaning Services</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4 leading-relaxed">Professional cleaning for homes, offices and end-of-tenancy with guaranteed results.</p>
+                        <a href="#cleaning-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
+                            Learn More 
+                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
-                -->
                 
-                <!-- Decorating Service Card -->
-                <div id="decorating" class="service-card bg-white rounded-lg overflow-hidden shadow-md transition duration-300">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Decorating Services" class="w-full h-48 object-cover">
+                <!-- Decoration Service Card -->
+                <div id="decoration" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-300">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/images/decoration/Decorative Touches/ali-moradi-vz9IbCAXHKQ-unsplash.jpg" alt="Decoration Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
                     <div class="p-6">
-                        <h3 class="text-xl font-bold mb-2 text-primary">Decorating Services</h3>
-                        <p class="text-gray-600 mb-4">Complete decorating solutions including wallpapering, plastering and feature walls.</p>
-                        <a href="#decorating-details" class="text-accent font-medium hover:underline">Learn More <i class="fas fa-arrow-right ml-1"></i></a>
+                        <div class="flex items-center mb-3">
+                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
+                                <i class="fas fa-palette text-accent text-lg"></i>
+                            </div>
+                            <h3 class="text-xl font-semibold text-primary">Decoration Services</h3>
+                        </div>
+                        <p class="text-gray-600 mb-4 leading-relaxed">Full decoration, plastering, wallpapering and decorative finishes for homes and businesses.</p>
+                        <a href="#decoration-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
+                            Learn More 
+                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Color Palette Selector -->
+
     <!-- Why Choose Us Section -->
     <section class="py-16 bg-gray-100">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Why ChooseAuxtreme Service LTD</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Why Choose Auxtreme Service LTD</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Trusted professionals delivering exceptional results with quality materials, expert craftsmanship, and complete customer satisfaction</p>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center p-6 bg-white rounded-lg shadow-sm">
@@ -301,7 +648,8 @@
     <!-- Painting Services Detailed Section -->
     <section id="painting-details" class="py-16 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Painting Services</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Painting Services</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional interior and exterior painting solutions with premium materials and expert craftsmanship</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
                 <div>
@@ -328,12 +676,8 @@
                     </div>
                 </div>
                 
-                <div class="relative before-after-container h-96">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Before painting" class="w-full h-full object-cover">
-                    <div class="before-after-slider">
-                        <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="After painting" class="w-full h-full object-cover">
-                    </div>
-                    <div class="slider-handle"></div>
+                <div class="relative h-96 rounded-lg overflow-hidden shadow-lg">
+                    <img src="static/images/images/painting/interior/paint_interior02.jpg" alt="Painting project" class="w-full h-full object-cover">
                 </div>
             </div>
             
@@ -362,7 +706,7 @@
                             <span>Feature walls & textures</span>
                         </li>
                     </ul>
-                    <a href="#interior-painting" class="text-accent font-medium hover:underline">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-accent font-medium hover:underline open-details" data-id="painting-interior">More details <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
                 
                 <!-- Exterior Painting -->
@@ -388,7 +732,7 @@
                             <span>Doors & window frames</span>
                         </li>
                     </ul>
-                    <a href="#exterior-painting" class="text-accent font-medium hover:underline">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-accent font-medium hover:underline open-details" data-id="painting-exterior">More details <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
                 
                 <!-- Commercial Painting -->
@@ -414,7 +758,7 @@
                             <span>Warehouses & industrial</span>
                         </li>
                     </ul>
-                    <a href="#commercial-painting" class="text-accent font-medium hover:underline">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-accent font-medium hover:underline open-details" data-id="painting-commercial">More details <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
                 
                 <!-- Restoration & Repair -->
@@ -440,20 +784,447 @@
                             <span>Complete repainting</span>
                         </li>
                     </ul>
-                    <a href="#restoration-painting" class="text-accent font-medium hover:underline">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                    <a href="#" class="text-accent font-medium hover:underline open-details" data-id="painting-restoration">More details <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
             </div>
             
+            <!-- Flooring Services Detailed Section -->
+            <section id="flooring-details" class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Flooring Services</h2>
+                    <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Expert flooring installation and repair with quality materials for residential and commercial properties</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-secondary">Expert Flooring Installation & Repair</h3>
+                            <p class="text-gray-600 mb-6">We supply and fit all major types of flooring for homes and businesses. From cosy carpets to elegant herringbone and durable engineered wood, our team ensures a perfect finish every time.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Carpets</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Vinyl Flooring</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Laminate Flooring</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Engineered Wood Flooring</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Herringbone Flooring</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>All Types of Flooring Solutions</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative h-96">
+                            <img src="static/images/images/flooring/Engineered Wood Flooring/d5-render-KSljCphBZ6Q-unsplash.jpg" alt="Flooring work" class="w-full h-full object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-rug text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Carpets</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Professional carpet supply, cutting and fit for rooms of any size with a range of pile options.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Wide selection of piles & colours</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Professional measuring & cutting</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Stain-resistant treatments available</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-carpets">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-square-full text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Vinyl Flooring</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Durable, water-resistant vinyl installations ideal for kitchens, bathrooms and high-traffic areas.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Waterproof & easy to clean</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Wide range of finishes</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-vinyl">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-th-large text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Laminate Flooring</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Cost-effective laminate options with professional subfloor preparation and precision fitting.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Durable & scratch-resistant</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Quick installation</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-laminate">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-tree text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Engineered Wood Flooring</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Stable engineered wood solutions that combine the look of real timber with improved moisture resistance.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Real wood top layer</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Suitable for underfloor heating</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-engineered">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-border-style text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Herringbone Flooring</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Expert herringbone pattern laying for a premium, classic look using engineered or solid wood.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Precision pattern installation</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Bespoke finishing options</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-herringbone">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-th-list text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">All Types of Flooring Solutions</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Comprehensive flooring services including supply, installation and maintenance for projects of any size.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>End-to-end service from supply to finish</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i>
+                                    <span>Custom solutions & finishes</span>
+                                </li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="flooring-all">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Cleaning Services Detailed Section -->
+            <section id="cleaning-details" class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Cleaning Services</h2>
+                    <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional cleaning solutions for homes, offices, and commercial spaces with guaranteed results</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-secondary">Professional & Reliable Cleaning</h3>
+                            <p class="text-gray-600 mb-6">Our cleaning teams deliver thorough, reliable cleaning for homes, offices and properties between tenancies. We tailor each clean to your needs and guarantee high standards.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>End of Tenancy Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Regular Domestic Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>One-Off Deep Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Carpet Shampoo Wash</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>After Builders Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Office & Event Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Spring Cleaning</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Ironing & Washing Service</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative h-96">
+                            <img src="static/images/images/cleaning/Carpet Care/istockphoto-2214252212-612x612.webp" alt="Cleaning service" class="w-full h-full object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-home text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Tenancy Cleaning</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Guaranteed end-of-tenancy cleans to help you secure your deposit back or prepare a property for new occupants.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Guaranteed standards for landlords</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Deep oven & window cleaning options</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Move-in & move-out friendly scheduling</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-tenancy">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-house-damage text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Home Cleaning</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Regular domestic cleaning packages to keep your home fresh, plus seasonal spring cleans when you need them most.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Regular domestic cleaning</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Spring cleans & one-off sessions</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-home">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-broom text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Deep & Special Cleaning</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Thorough deep cleans and specialist services for builders' sites, stubborn grime and difficult-to-reach areas.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>One-off deep cleaning</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>After builders cleaning</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-deep">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                            <!-- removed decoration-related cards that were placed inside cleaning section -->
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-soap text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Carpet Care</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Professional carpet shampooing and care to restore pile, remove stains and extend the life of your carpets.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Carpet shampoo wash</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Stain treatment & deodorising</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-carpet">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-building text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Office & Commercial Cleaning</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Reliable cleaning for offices, retail and events to keep commercial spaces hygienic and professional.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Office cleaning</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Event cleaning & turnaround</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-office">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-tshirt text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Laundry Services</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Ironing and washing services available as a convenient add-on to cleaning bookings or standalone service.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Ironing & washing service</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Collection & delivery available (on request)</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-laundry">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Color Palette Selector -->
+            
+            <!-- Decoration Services Detailed Section -->
+            <section id="decoration-details" class="py-16 bg-white">
+                <div class="container mx-auto px-4">
+                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Decoration Services</h2>
+                    <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Transform your space with professional decoration, plastering, wallpapering, and decorative finishes</p>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-4 text-secondary">Transform Your Space with Professional Decoration</h3>
+                            <p class="text-gray-600 mb-6">Our decoration teams deliver high-quality finishes for homes and commercial properties. From full decoration to bespoke decorative touches, we provide skilled trades to achieve beautiful results.</p>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Full Decoration – All aspects of home & commercial decor</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Filling & Plastering – Smooth finishes for walls & ceilings</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Wallpaper Removal & Hanging – Modern, textured & bespoke designs</span>
+                                </div>
+                                <div class="flex items-start">
+                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
+                                    <span>Decorative Touches – Feature walls, textures & finishing details</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="relative h-96">
+                            <img src="static/images/images/decoration/Decorative Touches/ali-moradi-vz9IbCAXHKQ-unsplash.jpg" alt="Decoration work" class="w-full h-full object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-paint-roller text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Full Decoration</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Complete decoration packages covering planning, prep, painting and finishing for homes and businesses.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Full project management</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Multi-room and whole-property options</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="decoration-full">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-tools text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Filling & Plastering</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Skilled plastering to create smooth, paint-ready surfaces for a premium finish.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Skim & repair</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Crack consolidation & patching</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="decoration-plaster">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-scroll text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Wallpaper Removal & Hanging</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Removal of old coverings and expert hanging of new wallpapers, including pattern matching.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Adhesive removal & surface prep</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Pattern matching & trimming</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="decoration-wallpaper">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <div class="flex items-center mb-4">
+                                <div class="bg-primary text-white p-3 rounded-full mr-4">
+                                    <i class="fas fa-star text-xl"></i>
+                                </div>
+                                <h3 class="text-xl font-bold text-primary">Decorative Touches</h3>
+                            </div>
+                            <p class="text-gray-600 mb-4">Feature walls, textures and specialist finishes to personalise interiors.</p>
+                            <ul class="space-y-2 mb-4">
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Feature wall finishes</span></li>
+                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Specialist textured & metallic finishes</span></li>
+                            </ul>
+                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="decoration-touch">More details <i class="fas fa-arrow-right ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <div class="mt-16 bg-gray-50 p-8 rounded-lg">
-                <h3 class="text-2xl font-bold mb-6 text-center text-primary">Try Our Colour Palette Selector</h3>
-                <p class="text-gray-600 text-center mb-8">Visualise how different colours will look in your space before making a decision.</p>
+                <h3 class="text-3xl md:text-4xl font-display font-bold mb-4 text-center section-heading">Try Our Colour Palette Selector</h3>
+                <p class="text-lg text-gray-600 text-center mb-8 max-w-2xl mx-auto">Visualise how different colours will look in your space before making a decision with our interactive preview tool</p>
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                     <div>
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Select Room Type</label>
-                            <select class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
+                            <select id="room-type-select" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
                                 <option>Living Room</option>
                                 <option>Bedroom</option>
                                 <option>Kitchen</option>
@@ -464,29 +1235,29 @@
                         
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Select Colour Family</label>
-                            <div class="flex flex-wrap gap-3">
-                                <div class="color-swatch bg-red-500" data-color="red"></div>
-                                <div class="color-swatch bg-blue-500" data-color="blue"></div>
-                                <div class="color-swatch bg-green-500" data-color="green"></div>
-                                <div class="color-swatch bg-yellow-500" data-color="yellow"></div>
-                                <div class="color-swatch bg-purple-500" data-color="purple"></div>
-                                <div class="color-swatch bg-gray-500" data-color="gray"></div>
-                                <div class="color-swatch bg-white border border-gray-300" data-color="white"></div>
-                                <div class="color-swatch bg-black" data-color="black"></div>
+                            <div class="flex flex-wrap gap-2 sm:gap-3 justify-center sm:justify-start">
+                                <div class="color-swatch bg-red-500 w-8 h-8 sm:w-10 sm:h-10" data-color="red"></div>
+                                <div class="color-swatch bg-blue-500 w-8 h-8 sm:w-10 sm:h-10" data-color="blue"></div>
+                                <div class="color-swatch bg-green-500 w-8 h-8 sm:w-10 sm:h-10" data-color="green"></div>
+                                <div class="color-swatch bg-yellow-500 w-8 h-8 sm:w-10 sm:h-10" data-color="yellow"></div>
+                                <div class="color-swatch bg-purple-500 w-8 h-8 sm:w-10 sm:h-10" data-color="purple"></div>
+                                <div class="color-swatch bg-gray-500 w-8 h-8 sm:w-10 sm:h-10" data-color="gray"></div>
+                                <div class="color-swatch bg-white border border-gray-300 w-8 h-8 sm:w-10 sm:h-10" data-color="white"></div>
+                                <div class="color-swatch bg-black w-8 h-8 sm:w-10 sm:h-10" data-color="black"></div>
                             </div>
                         </div>
                         
                         <div>
                             <label class="block text-gray-700 mb-2">Select Specific Shade</label>
-                            <div class="flex flex-wrap gap-3" id="shade-container">
+                            <div class="flex flex-wrap gap-2 sm:gap-3 justify-center sm:justify-start" id="shade-container">
                                 <!-- Shades will be populated by JavaScript -->
                             </div>
                         </div>
                     </div>
                     
-                    <div class="relative">
-                        <img id="room-image" src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Room preview" class="w-full rounded shadow-lg">
-                        <div id="color-overlay" class="absolute inset-0 mix-blend-multiply opacity-0 transition-opacity duration-300"></div>
+                    <div class="relative overflow-hidden rounded-lg">
+                        <img id="room-image" src="static/images/assets/Living room/living-room-white-light.jpg" alt="Room preview" class="w-full h-48 sm:h-64 md:h-96 object-cover block shadow-lg">
+                        <div id="color-overlay" class="absolute inset-0 mix-blend-multiply opacity-0 transition-opacity duration-300 pointer-events-none"></div>
                     </div>
                 </div>
             </div>
@@ -496,62 +1267,63 @@
     <!-- Booking Section -->
     <section id="booking" class="py-16 bg-primary text-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12">Book Your Service</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 text-white">Book Your Service</h2>
+            <p class="text-lg text-blue-100 text-center mb-12 max-w-2xl mx-auto">Get started with our simple booking process and receive a personalized quote for your project</p>
             
-            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-lg overflow-hidden text-gray-800">
                 <div class="p-6 md:p-8">
-                    <div class="flex mb-6">
-                        <div class="flex-1 border-b-2 border-accent pb-2">
+                    <div class="flex mb-6 overflow-x-auto">
+            <div class="flex-1 min-w-0 border-b-2 border-accent pb-2 px-2">
                             <div class="flex items-center justify-center">
-                                <div class="w-8 h-8 rounded-full bg-accent text-primary flex items-center justify-center font-bold mr-2">1</div>
-                                <span class="font-medium">Service</span>
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-accent text-primary flex items-center justify-center font-bold mr-1 sm:mr-2 text-sm sm:text-base">1</div>
+                <span class="font-medium text-primary text-xs sm:text-base">Service</span>
                             </div>
                         </div>
-                        <div class="flex-1 border-b-2 border-gray-200 pb-2">
+            <div class="flex-1 min-w-0 border-b-2 border-gray-200 pb-2 px-2">
                             <div class="flex items-center justify-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-2">2</div>
-                                <span class="text-gray-600">Location</span>
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-1 sm:mr-2 text-sm sm:text-base">2</div>
+                <span class="text-gray-600 text-xs sm:text-base">Location</span>
                             </div>
                         </div>
-                        <div class="flex-1 border-b-2 border-gray-200 pb-2">
+            <div class="flex-1 min-w-0 border-b-2 border-gray-200 pb-2 px-2">
                             <div class="flex items-center justify-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-2">3</div>
-                                <span class="text-gray-600">Date & Time</span>
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-1 sm:mr-2 text-sm sm:text-base">3</div>
+                <span class="text-gray-600 text-xs sm:text-base">Date & Time</span>
                             </div>
                         </div>
-                        <div class="flex-1 border-b-2 border-gray-200 pb-2">
+            <div class="flex-1 min-w-0 border-b-2 border-gray-200 pb-2 px-2">
                             <div class="flex items-center justify-center">
-                                <div class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-2">4</div>
-                                <span class="text-gray-600">Confirm</span>
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center font-bold mr-1 sm:mr-2 text-sm sm:text-base">4</div>
+                <span class="text-gray-600 text-xs sm:text-base">Confirm</span>
                             </div>
                         </div>
                     </div>
                     
                     <div id="step-1">
                         <h3 class="text-xl font-bold mb-6 text-primary">Select Your Service</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                            <button class="service-option border border-gray-300 rounded-lg p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="painting">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-8">
+                            <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="painting">
                                 <div class="flex items-center">
-                                    <i class="fas fa-paint-roller text-2xl text-accent mr-3"></i>
-                                    <span class="font-medium">Painting Services</span>
+                                    <i class="fas fa-paint-roller text-xl sm:text-2xl text-accent mr-3"></i>
+                                    <span class="font-medium text-sm sm:text-base">Painting Services</span>
                                 </div>
                             </button>
-                            <button class="service-option border border-gray-300 rounded-lg p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="flooring">
+                            <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="flooring">
                                 <div class="flex items-center">
-                                    <i class="fas fa-floor-plan text-2xl text-accent mr-3"></i>
-                                    <span class="font-medium">Flooring Services</span>
+                                    <i class="fas fa-rug text-xl sm:text-2xl text-accent mr-3"></i>
+                                    <span class="font-medium text-sm sm:text-base">Flooring Services</span>
                                 </div>
                             </button>
-                       <!--     <button class="service-option border border-gray-300 rounded-lg p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="cleaning">
+                            <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="cleaning">
                                 <div class="flex items-center">
-                                    <i class="fas fa-broom text-2xl text-accent mr-3"></i>
-                                    <span class="font-medium">Cleaning Services</span>
+                                    <i class="fas fa-broom text-xl sm:text-2xl text-accent mr-3"></i>
+                                    <span class="font-medium text-sm sm:text-base">Cleaning Services</span>
                                 </div>
-                            </button> -->
-                            <button class="service-option border border-gray-300 rounded-lg p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="decorating">
+                            </button>
+                            <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="decorating">
                                 <div class="flex items-center">
-                                    <i class="fas fa-couch text-2xl text-accent mr-3"></i>
-                                    <span class="font-medium">Decorating Services</span>
+                                    <i class="fas fa-couch text-xl sm:text-2xl text-accent mr-3"></i>
+                                    <span class="font-medium text-sm sm:text-base">Decorating Services</span>
                                 </div>
                             </button>
                         </div>
@@ -574,7 +1346,7 @@
                         </div>
                         
                         <div class="flex justify-between">
-                            <button id="prev-step-2" class="text-gray-600 font-medium hover:text-primary transition">Back</button>
+                            <button id="prev-step-2" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Back</button>
                             <button id="next-step-2" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Next</button>
                         </div>
                     </div>
@@ -583,70 +1355,28 @@
                         <h3 class="text-xl font-bold mb-6 text-primary">Select Date & Time</h3>
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Available Dates</label>
-                            <div class="grid grid-cols-7 gap-2 mb-4">
-                                <div class="text-center font-medium text-gray-500 py-2">Sun</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Mon</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Tue</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Wed</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Thu</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Fri</div>
-                                <div class="text-center font-medium text-gray-500 py-2">Sat</div>
-                                
-                                <!-- Calendar days will be populated by JavaScript -->
-                                <div class="text-center py-2 text-gray-400">29</div>
-                                <div class="text-center py-2 text-gray-400">30</div>
-                                <div class="text-center py-2 text-gray-400">31</div>
-                                <div class="text-center py-2 border border-accent rounded-full bg-accent text-white">1</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">2</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">3</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">4</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">5</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">6</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">7</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">8</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">9</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">10</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">11</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">12</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">13</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">14</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">15</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">16</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">17</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">18</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">19</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">20</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">21</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">22</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">23</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">24</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">25</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">26</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">27</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">28</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">29</div>
-                                <div class="text-center py-2 hover:bg-gray-100 rounded-full cursor-pointer">30</div>
-                                <div class="text-center py-2 text-gray-400">1</div>
-                                <div class="text-center py-2 text-gray-400">2</div>
-                                <div class="text-center py-2 text-gray-400">3</div>
-                                <div class="text-center py-2 text-gray-400">4</div>
-                                <div class="text-center py-2 text-gray-400">5</div>
-                                <div class="text-center py-2 text-gray-400">6</div>
+                            <div class="mb-4">
+                                <div class="flex items-center justify-between mb-2">
+                                    <button id="calendar-prev" class="px-3 py-1 rounded bg-white text-gray-700 hover:bg-gray-100">&lt;</button>
+                                    <div id="calendar-month-year" class="font-medium text-gray-700"></div>
+                                    <button id="calendar-next" class="px-3 py-1 rounded bg-white text-gray-700 hover:bg-gray-100">&gt;</button>
+                                </div>
+                                <div id="calendar" class="grid grid-cols-7 gap-2 text-center"></div>
                             </div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Available Time Slots</label>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition">9:00 AM</button>
-                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition">11:00 AM</button>
-                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition">1:00 PM</button>
-                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition">3:00 PM</button>
+                            <div class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2">
+                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition text-sm">9:00 AM</button>
+                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition text-sm">11:00 AM</button>
+                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition text-sm">1:00 PM</button>
+                                <button class="time-slot border border-gray-300 rounded px-3 py-2 text-center hover:border-accent hover:bg-gray-50 transition text-sm">3:00 PM</button>
                             </div>
                         </div>
                         
                         <div class="flex justify-between">
-                            <button id="prev-step-3" class="text-gray-600 font-medium hover:text-primary transition">Back</button>
+                            <button id="prev-step-3" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Back</button>
                             <button id="next-step-3" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Next</button>
                         </div>
                     </div>
@@ -655,7 +1385,7 @@
                         <h3 class="text-xl font-bold mb-6 text-primary">Confirm Your Booking</h3>
                         <div class="bg-gray-50 p-4 rounded-lg mb-6">
                             <h4 class="font-bold mb-2">Booking Summary</h4>
-                            <div class="grid grid-cols-2 gap-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
                                     <p class="text-gray-600 text-sm">Service</p>
                                     <p id="booking-service" class="font-medium">Painting Services</p>
@@ -666,24 +1396,24 @@
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Date</p>
-                                    <p id="booking-date" class="font-medium">15 June 2023</p>
+                                    <p id="booking-date" class="font-medium">Not selected</p>
                                 </div>
                                 <div>
                                     <p class="text-gray-600 text-sm">Time</p>
-                                    <p id="booking-time" class="font-medium">11:00 AM</p>
+                                    <p id="booking-time" class="font-medium">Not selected</p>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="mb-6">
                             <label class="block text-gray-700 mb-2">Your Details</label>
-                            <input type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded mb-3 focus:outline-none focus:ring-2 focus:ring-accent">
-                            <input type="email" placeholder="Email Address" class="w-full px-4 py-2 border rounded mb-3 focus:outline-none focus:ring-2 focus:ring-accent">
-                            <input type="tel" placeholder="Phone Number" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
+                            <input id="booking-name" type="text" placeholder="Full Name" class="w-full px-4 py-2 border rounded mb-3 focus:outline-none focus:ring-2 focus:ring-accent">
+                            <input id="booking-email" type="email" placeholder="Email Address" class="w-full px-4 py-2 border rounded mb-3 focus:outline-none focus:ring-2 focus:ring-accent">
+                            <input id="booking-phone" type="tel" placeholder="Phone Number" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
                         </div>
                         
                         <div class="flex justify-between">
-                            <button id="prev-step-4" class="text-gray-600 font-medium hover:text-primary transition">Back</button>
+                            <button id="prev-step-4" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Back</button>
                             <button id="confirm-booking" class="bg-accent text-primary px-6 py-2 rounded font-bold hover:bg-yellow-500 transition">Confirm Booking</button>
                         </div>
                     </div>
@@ -704,100 +1434,210 @@
     <!-- Gallery Section -->
     <section id="gallery" class="py-16 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Our Work Gallery</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Our Work Gallery</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Explore our portfolio of completed projects showcasing quality craftsmanship and attention to detail</p>
             
             <div class="flex justify-center mb-8">
-                <div class="inline-flex rounded-md shadow-sm">
-                    <button class="gallery-filter px-4 py-2 text-sm font-medium rounded-l-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100" data-filter="all">
+                <div class="inline-flex flex-wrap justify-center rounded-xl shadow-lg bg-white p-1 border border-gray-100 max-w-full">
+                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-accent text-primary border-transparent shadow-md whitespace-nowrap" data-filter="all">
                         All Projects
                     </button>
-                    <button class="gallery-filter px-4 py-2 text-sm font-medium border-t border-b border-gray-200 bg-white text-gray-900 hover:bg-gray-100" data-filter="painting">
+                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="painting">
                         Painting
                     </button>
-                    <button class="gallery-filter px-4 py-2 text-sm font-medium border-t border-b border-gray-200 bg-white text-gray-900 hover:bg-gray-100" data-filter="flooring">
+                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="flooring">
                         Flooring
                     </button>
-                    <button class="gallery-filter px-4 py-2 text-sm font-medium border-t border-b border-gray-200 bg-white text-gray-900 hover:bg-gray-100" data-filter="cleaning">
+                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="cleaning">
                         Cleaning
                     </button>
-                    <button class="gallery-filter px-4 py-2 text-sm font-medium rounded-r-lg border border-gray-200 bg-white text-gray-900 hover:bg-gray-100" data-filter="decorating">
+                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="decorating">
                         Decorating
                     </button>
                 </div>
             </div>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Painting Project 1 -->
-                <div class="gallery-item painting relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Painting project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">Modern Living Room</h3>
-                            <p class="text-sm">London, UK</p>
-                            <p class="text-accent mt-2">Painting Services</p>
+            <div id="painting-examples" class="space-y-12 hidden examples">
+                <!-- Example 1 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-4 py-2 rounded-full bg-gray-200 text-gray-800 font-semibold" aria-hidden="true">Before</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Painting/painting-before.jpg" alt="Painting Before" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-6 py-2 rounded-full bg-accent text-primary font-bold" aria-hidden="true">After</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Painting/painting-after.jpg" alt="Painting After" class="w-full h-96 object-cover rounded-lg shadow-lg">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Flooring Project 1 -->
-                <div class="gallery-item flooring relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Flooring project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">Herringbone Flooring</h3>
-                            <p class="text-sm">Manchester, UK</p>
-                            <p class="text-accent mt-2">Flooring Services</p>
+                <!-- Example 2 -->
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-4 py-2 rounded-full bg-gray-200 text-gray-800 font-semibold" aria-hidden="true">Before</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Painting/painting2-before.jpg" alt="Painting2 Before" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-6 py-2 rounded-full bg-accent text-primary font-bold" aria-hidden="true">After</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Painting/painting2-after.jpg" alt="Painting2 After" class="w-full h-96 object-cover rounded-lg shadow-lg">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Cleaning Project 1 -->
-                <div class="gallery-item cleaning relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Cleaning project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">End of Tenancy Clean</h3>
-                            <p class="text-sm">Birmingham, UK</p>
-                            <p class="text-accent mt-2">Cleaning Services</p>
+            </div>
+            <!-- Flooring before/after examples -->
+            <div id="flooring-examples" class="space-y-12 hidden examples">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-4 py-2 rounded-full bg-gray-200 text-gray-800 font-semibold" aria-hidden="true">Before</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Flooring/flooring-before.jpg" alt="Flooring Before" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-6 py-2 rounded-full bg-accent text-primary font-bold" aria-hidden="true">After</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Flooring/flooring-after.jpg" alt="Flooring After" class="w-full h-96 object-cover rounded-lg shadow-lg">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Decorating Project 1 -->
-                <div class="gallery-item decorating relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Decorating project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">Feature Wallpaper</h3>
-                            <p class="text-sm">Edinburgh, UK</p>
-                            <p class="text-accent mt-2">Decorating Services</p>
+                <!-- second flooring example removed -->
+            </div>
+
+            <!-- Cleaning before/after examples -->
+            <div id="cleaning-examples" class="space-y-12 hidden examples">
+                <div class="flex flex-col items-center gap-8">
+                    <div class="w-full text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-6 py-2 rounded-full bg-accent text-primary font-bold" aria-hidden="true">After</span>
+                        </div>
+                        <div class="before-after-image max-w-2xl mx-auto">
+                            <img src="static/images/gallery-images/Cleaning/cleaning1.jpg" alt="Cleaning After" class="w-full h-96 object-cover rounded-lg shadow-lg">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Painting Project 2 -->
-                <div class="gallery-item painting relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Painting project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">Exterior Paint Job</h3>
-                            <p class="text-sm">Bristol, UK</p>
-                            <p class="text-accent mt-2">Painting Services</p>
+                <!-- second cleaning example removed -->
+            </div>
+
+            <!-- Decorating before/after examples -->
+            <div id="decorating-examples" class="space-y-12 hidden examples">
+                <div class="flex flex-col md:flex-row items-center gap-8">
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-4 py-2 rounded-full bg-gray-200 text-gray-800 font-semibold" aria-hidden="true">Before</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Decorating/decorating-before.jpg" alt="Decorating Before" class="w-full h-96 object-cover rounded-lg shadow-lg">
+                        </div>
+                    </div>
+                    <div class="flex-1 text-center">
+                        <div class="inline-flex items-center justify-center mb-4">
+                            <span class="inline-block px-6 py-2 rounded-full bg-accent text-primary font-bold" aria-hidden="true">After</span>
+                        </div>
+                        <div class="before-after-image">
+                            <img src="static/images/gallery-images/Decorating/decorating-after.jpg" alt="Decorating After" class="w-full h-96 object-cover rounded-lg shadow-lg">
                         </div>
                     </div>
                 </div>
-                
-                <!-- Flooring Project 2 -->
-                <div class="gallery-item flooring relative group overflow-hidden rounded-lg shadow-md">
-                    <img src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Flooring project" class="w-full h-64 object-cover transition duration-500 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <div class="text-white text-center p-4">
-                            <h3 class="text-xl font-bold mb-1">Commercial Vinyl Flooring</h3>
-                            <p class="text-sm">Leeds, UK</p>
-                            <p class="text-accent mt-2">Flooring Services</p>
+                <!-- second decorating example removed -->
+            </div>
+            <div id="gallery-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Restored six project cards (All Projects) -->
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/gallery-images/Painting/painting-after.jpg" alt="Painting project" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Interior Painting</h3>
+                            <p class="text-sm leading-relaxed">Full room repainting with premium finishes.</p>
                         </div>
                     </div>
                 </div>
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left animate-delay-100">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/gallery-images/Painting/painting2-after.jpg" alt="Painting project 2" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Feature Wall Refresh</h3>
+                            <p class="text-sm leading-relaxed">Accent wall transformations and colour-matching.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left animate-delay-200">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/assets/Living%20room/living-room-white-light.jpg" alt="Living room" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Living Room Update</h3>
+                            <p class="text-sm leading-relaxed">Complete refresh including trims and touch ups.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left animate-delay-300">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/assets/Home%20Office/home-office-blue-medium.jpg" alt="Home office project" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Home Office Makeover</h3>
+                            <p class="text-sm leading-relaxed">Work-friendly painting, trims and acoustic-friendly finishes for home offices.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left animate-delay-400">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/assets/Kitchen/kitchen.jpg" alt="Kitchen project" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Kitchen Refresh</h3>
+                            <p class="text-sm leading-relaxed">Durable finishes for busy kitchens.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-card group relative bg-white rounded-xl overflow-hidden shadow-lg animate-slide-in-left animate-delay-300">
+                    <div class="relative overflow-hidden">
+                        <img src="static/images/assets/Bedroom/bedroom-purple-medium.jpg" alt="Bedroom project" class="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    <div class="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div class="p-6 text-white w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="font-bold text-xl mb-2">Bedroom Update</h3>
+                            <p class="text-sm leading-relaxed">Soft-tone repainting for a calming finish.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
@@ -805,7 +1645,8 @@
     <!-- Contact Form Section -->
     <section id="contact" class="py-16 bg-gray-100">
         <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-primary">Get In Touch</h2>
+            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Get In Touch</h2>
+            <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Ready to start your project? Contact our team for expert advice, free quotes, and professional service across the UK</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
                 <div>
@@ -878,41 +1719,62 @@
                 
                 <div>
                     <h3 class="text-2xl font-bold mb-6 text-secondary">Send Us a Message</h3>
-                    <form id="contact-form" class="space-y-4">
-                        <div>
-                            <label for="name" class="block text-gray-700 mb-1">Full Name</label>
-                            <input type="text" id="name" name="name" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
+                    <form id="contact-form" class="grid grid-cols-1 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="name" class="block text-gray-700 mb-1">Full Name</label>
+                                <div class="flex items-center gap-3">
+                                    <span class="form-icon"><i class="fas fa-user"></i></span>
+                                    <input type="text" id="name" name="name" required class="form-input w-full" placeholder="Your full name">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="email" class="block text-gray-700 mb-1">Email Address</label>
+                                <div class="flex items-center gap-3">
+                                    <span class="form-icon"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" id="email" name="email" required class="form-input w-full" placeholder="you@example.com">
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div>
-                            <label for="email" class="block text-gray-700 mb-1">Email Address</label>
-                            <input type="email" id="email" name="email" required class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="phone" class="block text-gray-700 mb-1">Phone Number</label>
+                                <div class="flex items-center gap-3">
+                                    <span class="form-icon"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" id="phone" name="phone" class="form-input w-full" placeholder="Mobile or landline">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="service" class="block text-gray-700 mb-1">Service Type</label>
+                                <div class="flex items-center gap-3">
+                                    <span class="form-icon"><i class="fas fa-clipboard-list"></i></span>
+                                    <select id="service" name="service" class="form-input w-full">
+                                        <option value="">Select a service</option>
+                                        <option value="painting">Painting Services</option>
+                                        <option value="flooring">Flooring Services</option>
+                                        <option value="cleaning">Cleaning Services</option>
+                                        <option value="decorating">Decorating Services</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        
-                        <div>
-                            <label for="phone" class="block text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
-                        </div>
-                        
-                        <div>
-                            <label for="service" class="block text-gray-700 mb-1">Service Type</label>
-                            <select id="service" name="service" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent">
-                                <option value="">Select a service</option>
-                                <option value="painting">Painting Services</option>
-                                <option value="flooring">Flooring Services</option>
-                         <!--       <option value="cleaning">Cleaning Services</option> -->
-                                <option value="decorating">Decorating Services</option>
-                            </select>
-                        </div>
-                        
+
                         <div>
                             <label for="message" class="block text-gray-700 mb-1">Your Message</label>
-                            <textarea id="message" name="message" rows="4" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-accent"></textarea>
+                            <div class="flex items-start gap-3">
+                                <span class="form-icon mt-2"><i class="fas fa-comment-dots"></i></span>
+                                <textarea id="message" name="message" rows="5" class="form-input w-full" placeholder="Tell us about your project, timescales or any questions"></textarea>
+                            </div>
                         </div>
-                        
-                        <button type="submit" class="bg-accent text-primary px-6 py-3 rounded font-bold hover:bg-yellow-500 transition w-full">Send Message</button>
+
+                        <div class="pt-2">
+                            <button type="submit" class="w-full py-3 rounded-lg font-bold text-white" style="background: linear-gradient(90deg,#ecc94b,#f6c84a); box-shadow: 0 10px 30px rgba(236,201,75,0.18);">Send Message</button>
+                        </div>
                     </form>
-                    
+
                     <div id="form-success" class="hidden mt-4 p-4 bg-green-100 text-green-700 rounded">
                         <i class="fas fa-check-circle mr-2"></i> Thank you! We will contact you shortly.
                     </div>
@@ -927,7 +1789,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div>
                     <h3 class="text-xl font-bold mb-4 flex items-center">
-                        <i class="fas fa-home mr-2 text-accent"></i>Auxtreme Service LTD
+                        <span class="site-logo mr-2" role="img" aria-label="Auxtreme Service LTD logo"></span>Auxtreme Service LTD
                     </h3>
                     <p class="mb-4">Professional home improvement services across the UK with guaranteed quality and customer satisfaction.</p>
                     <p>Covering England, Scotland, Wales and Northern Ireland.</p>
@@ -950,7 +1812,6 @@
                         <li><a href="#painting" class="hover:text-accent transition">Painting Services</a></li>
                         <li><a href="#flooring" class="hover:text-accent transition">Flooring Services</a></li>
                         <li><a href="#cleaning" class="hover:text-accent transition">Cleaning Services</a></li>
-                        <li><a href="#decorating" class="hover:text-accent transition">Decorating Services</a></li>
                     </ul>
                 </div>
                 
@@ -973,8 +1834,8 @@
                 </div>
             </div>
             
-            <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-                <p>&copy; 2023Auxtreme Service LTD. All rights reserved.</p>
+                <div class="border-t border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; 2025 Auxtreme Service LTD. All rights reserved.</p>
                 <div class="flex space-x-4 mt-4 md:mt-0">
                     <a href="#" class="hover:text-accent transition">Privacy Policy</a>
                     <a href="#" class="hover:text-accent transition">Terms of Service</a>
@@ -999,14 +1860,17 @@
             const button = dropdown.querySelector('button');
             const menu = dropdown.querySelector('.dropdown-menu');
             
-            button.addEventListener('click', () => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
                 menu.classList.toggle('hidden');
+                dropdown.classList.toggle('open');
             });
             
             // Close when clicking outside
             document.addEventListener('click', (e) => {
                 if (!dropdown.contains(e.target)) {
                     menu.classList.add('hidden');
+                    dropdown.classList.remove('open');
                 }
             });
         });
@@ -1028,23 +1892,52 @@
                 }
             });
         });
+
+        // Close dropdown menus when a dropdown link is clicked (desktop)
+        document.querySelectorAll('.dropdown-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                const menu = link.closest('.dropdown-menu');
+                if (menu) {
+                    menu.classList.add('hidden');
+                    const parent = menu.closest('.dropdown');
+                    if (parent) parent.classList.remove('open');
+                }
+            });
+        });
+
+        // Close mobile dropdown content and the mobile menu when a mobile-dropdown link is clicked
+        document.querySelectorAll('.mobile-menu .dropdown-content a').forEach(link => {
+            link.addEventListener('click', () => {
+                const content = link.closest('.dropdown-content');
+                if (content) content.classList.add('hidden');
+
+                // Reset chevron icon state on the button
+                const parent = link.closest('.dropdown');
+                if (parent) {
+                    const btn = parent.querySelector('button');
+                    const icon = btn ? btn.querySelector('i') : null;
+                    if (icon) {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                }
+
+                // Hide the entire mobile menu (so the nav collapses after navigation)
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        });
         
-        // Hero banner image rotation
-        const heroBanner = document.querySelector('.hero-banner');
-        const images = [
-            'https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-            'https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
-            'https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
-        ];
-        
-        let currentImageIndex = 0;
-        
-        function changeHeroImage() {
-            currentImageIndex = (currentImageIndex + 1) % images.length;
-            heroBanner.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+        // Hero banner slide crossfade
+        const heroSlides = Array.from(document.querySelectorAll('.hero-slide'));
+        let heroIndex = 0;
+        function nextHeroSlide() {
+            heroSlides[heroIndex].classList.remove('active');
+            heroIndex = (heroIndex + 1) % heroSlides.length;
+            heroSlides[heroIndex].classList.add('active');
         }
-        
-        setInterval(changeHeroImage, 5000);
+        setInterval(nextHeroSlide, 5000);
         
         // Before/After slider
         const beforeAfterContainer = document.querySelector('.before-after-container');
@@ -1100,6 +1993,45 @@
             });
         }
         
+        // Gallery filter logic for before/after painting examples
+        document.querySelectorAll('.gallery-filter').forEach(btn => {
+            btn.setAttribute('role', 'tab');
+            btn.setAttribute('aria-pressed', 'false');
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                // Visual selection: remove previous active styles and reset aria-pressed
+                document.querySelectorAll('.gallery-filter').forEach(b => {
+                    b.classList.remove('bg-accent','text-primary','border-transparent','shadow-md');
+                    b.classList.add('bg-white','text-gray-900');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+                // Apply stronger active styles to clicked tab
+                btn.classList.remove('bg-white','text-gray-900');
+                btn.classList.add('bg-accent','text-primary','border-transparent','shadow-md');
+                btn.setAttribute('aria-pressed', 'true');
+
+                // Show/hide gallery sections
+                const galleryItems = document.getElementById('gallery-items');
+                // hide all examples containers
+                document.querySelectorAll('.examples').forEach(e => e.classList.add('hidden'));
+
+                if (filter === 'all') {
+                    if (galleryItems) galleryItems.classList.remove('hidden');
+                } else {
+                    // show the matching examples container for the selected filter
+                    const exampleId = filter + '-examples';
+                    const examplesEl = document.getElementById(exampleId);
+                    if (examplesEl) {
+                        examplesEl.classList.remove('hidden');
+                    } else if (galleryItems) {
+                        // fallback to grid if examples not found
+                        galleryItems.classList.remove('hidden');
+                    }
+                    if (galleryItems) galleryItems.classList.add('hidden');
+                }
+            });
+        });
+
         // Color palette selector
         const colorSwatches = document.querySelectorAll('.color-swatch');
         const shadeContainer = document.getElementById('shade-container');
@@ -1117,21 +2049,126 @@
             black: ['#000000', '#212121', '#424242', '#616161', '#757575']
         };
         
+        const roomTypeSelect = document.getElementById('room-type-select');
+
+        // Image map per room type and color family
+        const roomColorImageMap = {
+            'Living Room': {
+                red: 'static/images/assets/Living room/living-room-red-medium.jpg',
+                blue: 'static/images/assets/Living room/living-room-blue-medium.jpg',
+                green: 'static/images/assets/Living room/living-room-green-medium.jpg',
+                yellow: 'static/images/assets/Living room/living-room-yellow-medium.jpg',
+                purple: 'static/images/assets/Living room/living-room-purple-medium.jpg',
+                gray: 'static/images/assets/Living room/living-room-grey-medium.jpg',
+                white: 'static/images/assets/Living room/living-room-white-light.jpg',
+                black: 'static/images/assets/Living room/living-room-black-dark.jpg'
+            },
+            'Bathroom': {
+                red: 'static/images/assets/Bathroom/bathroom-red.webp',
+                blue: 'static/images/assets/Bathroom/bathroom-blue-medium.jpg',
+                green: 'static/images/assets/Bathroom/bathroom-green-medium.jpg',
+                yellow: 'static/images/assets/Bathroom/bathroom-yellow.webp',
+                purple: 'static/images/assets/Bathroom/bathroom-purple.webp',
+                gray: 'static/images/assets/Bathroom/bathroom-grey.jpg',
+                white: 'static/images/assets/Bathroom/bathroom-white-light.jpg',
+                black: 'static/images/assets/Bathroom/bathroom-black.webp'
+            }
+            ,
+            'Kitchen': {
+                red: 'static/images/assets/Kitchen/kitchen-red.webp',
+                blue: 'static/images/assets/Kitchen/kitchen-blue-medium.jpg',
+                green: 'static/images/assets/Kitchen/kitchen-green-medium.jpg',
+                yellow: 'static/images/assets/Kitchen/kitchen-yellow.webp',
+                purple: 'static/images/assets/Kitchen/kitchen-purple.webp',
+                gray: 'static/images/assets/Kitchen/kitchen-grey-medium.jpg',
+                white: 'static/images/assets/Kitchen/kitchen-white-light.jpg',
+                black: 'static/images/assets/Kitchen/kitchen.jpg'
+            }
+            ,
+            'Bedroom': {
+                red: 'static/images/assets/Bedroom/bedroom-red-medium.jpg',
+                blue: 'static/images/assets/Bedroom/bedroom-blue-medium.jpg',
+                green: 'static/images/assets/Bedroom/bedroom-green-medium.jpg',
+                yellow: 'static/images/assets/Bedroom/bedroom-yellow.webp',
+                purple: 'static/images/assets/Bedroom/bedroom-purple-medium.jpg',
+                gray: 'static/images/assets/Bedroom/bedroom-grey.jpg',
+                white: 'static/images/assets/Bedroom/bedroom-white-light.jpg',
+                black: 'static/images/assets/Bedroom/bedroom-black.webp'
+            }
+            ,
+            'Home Office': {
+                red: 'static/images/assets/Home Office/home-office-red.webp',
+                blue: 'static/images/assets/Home Office/home-office-blue-medium.jpg',
+                green: 'static/images/assets/Home Office/home-office-green-medium.jpg',
+                yellow: 'static/images/assets/Home Office/home-office-yellow.webp',
+                purple: 'static/images/assets/Home Office/home-office-purple.webp',
+                gray: 'static/images/assets/Home Office/home-office-grey.webp',
+                white: 'static/images/assets/Home Office/home-office-white.jpg',
+                black: 'static/images/assets/Home Office/home-office-black.webp'
+            }
+        };
+
+        // When room type changes, update preview to the same color family if selected
+    if (roomTypeSelect) {
+            roomTypeSelect.addEventListener('change', () => {
+                const selectedRoom = roomTypeSelect.value;
+                // find currently active color swatch
+                const active = document.querySelector('.color-swatch.active');
+                const color = active ? active.dataset.color : null;
+                if (color && roomColorImageMap[selectedRoom] && roomColorImageMap[selectedRoom][color]) {
+                    roomImage.src = roomColorImageMap[selectedRoom][color].split('/').map(encodeURIComponent).join('/');
+                } else if (roomColorImageMap[selectedRoom]) {
+                    const fallback = Object.values(roomColorImageMap[selectedRoom])[0];
+                    if (fallback) roomImage.src = fallback.split('/').map(encodeURIComponent).join('/');
+                }
+        // Clear any selected shade and hide overlay when switching rooms
+        colorOverlay.style.opacity = '0';
+        colorOverlay.style.backgroundColor = 'transparent';
+        document.querySelectorAll('#shade-container .color-swatch').forEach(s => s.classList.remove('selected-shade','ring-2','ring-accent'));
+            });
+        }
+
         colorSwatches.forEach(swatch => {
             swatch.addEventListener('click', () => {
                 const color = swatch.dataset.color;
+                // mark active family
+                colorSwatches.forEach(s => s.classList.remove('active','ring-2','ring-accent'));
+                swatch.classList.add('active','ring-2','ring-accent');
                 shadeContainer.innerHTML = '';
-                
+                // Clear any selected shade and hide overlay when changing base colour
+                colorOverlay.style.opacity = '0';
+                colorOverlay.style.backgroundColor = 'transparent';
+                document.querySelectorAll('#shade-container .color-swatch').forEach(s => s.classList.remove('selected-shade','ring-2','ring-accent'));
+                const selectedRoom = (roomTypeSelect && roomTypeSelect.value) ? roomTypeSelect.value : 'Living Room';
+                const colorImageMap = (roomColorImageMap[selectedRoom] && roomColorImageMap[selectedRoom][color]) ? roomColorImageMap[selectedRoom] : null;
+                if (colorImageMap && colorImageMap[color]) {
+                    // encode path segments to handle spaces
+                    roomImage.src = colorImageMap[color].split('/').map(encodeURIComponent).join('/');
+                } else if (roomColorImageMap[selectedRoom]) {
+                    // fallback: if color missing for room, try white or any available
+                    const fallback = Object.values(roomColorImageMap[selectedRoom])[0];
+                    if (fallback) roomImage.src = fallback.split('/').map(encodeURIComponent).join('/');
+                }
+
                 colorShades[color].forEach(shade => {
                     const shadeElement = document.createElement('div');
-                    shadeElement.className = 'color-swatch';
+                    shadeElement.className = 'color-swatch w-8 h-8 sm:w-10 sm:h-10';
                     shadeElement.style.backgroundColor = shade;
                     shadeElement.dataset.shade = shade;
                     shadeContainer.appendChild(shadeElement);
-                    
+
                     shadeElement.addEventListener('click', () => {
-                        colorOverlay.style.backgroundColor = shade;
-                        colorOverlay.style.opacity = '0.3';
+                        // Toggle shade selection: if already selected, unselect and hide overlay
+                        const currentlySelected = shadeElement.classList.contains('selected-shade');
+                        document.querySelectorAll('#shade-container .color-swatch').forEach(s => s.classList.remove('selected-shade','ring-2','ring-accent'));
+                        if (currentlySelected) {
+                            colorOverlay.style.opacity = '0';
+                            colorOverlay.style.backgroundColor = 'transparent';
+                        } else {
+                            shadeElement.classList.add('selected-shade','ring-2','ring-accent');
+                            colorOverlay.style.backgroundColor = shade;
+                            colorOverlay.style.opacity = '0.35';
+                        }
                     });
                 });
             });
@@ -1141,6 +2178,741 @@
         const bookingSteps = [
             document.getElementById('step-1'),
             document.getElementById('step-2'),
-            document.getElementById('step-
+            document.getElementById('step-3'),
+            document.getElementById('step-4'),
+            document.getElementById('booking-confirmation')
+        ];
+
+        let currentStep = 0;
+        let selectedService = null;
+
+        function showStep(step) {
+            bookingSteps.forEach((s, index) => {
+                s.classList.toggle('hidden', index !== step);
+            });
+            updateStepper(step);
+        }
+
+        function updateStepper(active) {
+            const headers = document.querySelectorAll('.p-6 .flex.mb-6 > div');
+            headers.forEach((h, idx) => {
+                // Toggle the bottom border on the header wrapper so the yellow underline moves
+                if (idx <= active) {
+                    h.classList.remove('border-gray-200');
+                    h.classList.add('border-accent');
+                } else {
+                    h.classList.remove('border-accent');
+                    h.classList.add('border-gray-200');
+                }
+
+                // Target the circular step element more robustly and the label
+                const circle = h.querySelector('.rounded-full');
+                const label = h.querySelector('span');
+
+                if (circle) {
+                    if (idx <= active) {
+                        circle.classList.remove('bg-gray-200','text-gray-600');
+                        circle.classList.add('bg-accent','text-primary');
+                    } else {
+                        circle.classList.remove('bg-accent','text-primary');
+                        circle.classList.add('bg-gray-200','text-gray-600');
+                    }
+                }
+
+                if (label) {
+                    if (idx <= active) {
+                        label.classList.remove('text-gray-600');
+                        label.classList.add('text-primary');
+                    } else {
+                        label.classList.remove('text-primary');
+                        label.classList.add('text-gray-600');
+                    }
+                }
+            });
+        }
+
+        // Wire service selection buttons
+        const serviceOptionButtons = document.querySelectorAll('.service-option');
+        const bookingServiceEl = document.getElementById('booking-service');
+        const serviceNameMap = {
+            painting: 'Painting Services',
+            flooring: 'Flooring Services',
+            cleaning: 'Cleaning Services',
+            decorating: 'Decorating Services',
+            decoration: 'Decoration Services'
+        };
+
+        serviceOptionButtons.forEach(btn => {
+            // Ensure buttons are keyboard accessible and reflect state
+            btn.setAttribute('role', 'button');
+            btn.setAttribute('tabindex', '0');
+            btn.setAttribute('aria-pressed', 'false');
+
+            const selectButton = () => {
+                // Clear previous visual selection
+                serviceOptionButtons.forEach(b => {
+                    b.classList.remove('border-accent', 'bg-gray-50', 'ring-2', 'ring-accent', 'shadow');
+                    b.setAttribute('aria-pressed', 'false');
+                });
+
+                // Apply stronger selected styles to the clicked button
+                btn.classList.add('border-accent', 'bg-gray-50', 'ring-2', 'ring-accent', 'shadow');
+                btn.setAttribute('aria-pressed', 'true');
+
+                // Save selection
+                selectedService = btn.dataset.service;
+
+                // Update booking summary text (if present)
+                if (bookingServiceEl) {
+                    bookingServiceEl.textContent = serviceNameMap[selectedService] || btn.textContent.trim();
+                }
+            };
+
+            btn.addEventListener('click', selectButton);
+            btn.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    selectButton();
+                }
+            });
+        });
+
+        // Validate selection before moving to next step
+        document.getElementById('next-step-1').addEventListener('click', () => {
+            if (!selectedService) {
+                // small inline message instead of alert
+                const notice = document.createElement('div');
+                notice.className = 'text-red-600 mt-3';
+                notice.id = 'service-select-notice';
+                notice.textContent = 'Please select a service before continuing.';
+                const container = document.querySelector('#step-1 .max-w-3xl') || document.getElementById('step-1');
+                // remove existing notice if any
+                const existing = document.getElementById('service-select-notice');
+                if (existing) existing.remove();
+                container.appendChild(notice);
+                return;
+            }
+            // Remove any notice
+            const existing = document.getElementById('service-select-notice');
+            if (existing) existing.remove();
+            showStep(1);
+        });
+
+        document.getElementById('prev-step-2').addEventListener('click', () => {
+            showStep(0);
+        });
+
+        document.getElementById('next-step-2').addEventListener('click', () => {
+            showStep(2);
+        });
+
+        document.getElementById('prev-step-3').addEventListener('click', () => {
+            showStep(1);
+        });
+
+        document.getElementById('next-step-3').addEventListener('click', () => {
+            // Validate date and time selected before moving to confirmation step
+            const bookingTimeEl = document.getElementById('booking-time');
+            const bookingDateEl = document.getElementById('booking-date');
+            const existingNotice = document.getElementById('date-time-notice');
+            if (existingNotice) existingNotice.remove();
+
+            const timeText = bookingTimeEl ? bookingTimeEl.textContent.trim() : '';
+            const dateText = bookingDateEl ? bookingDateEl.textContent.trim() : '';
+
+            if (!dateText || dateText === 'Not selected' || !timeText || timeText === 'Not selected') {
+                const notice = document.createElement('div');
+                notice.id = 'date-time-notice';
+                notice.className = 'text-red-600 mt-3';
+                notice.textContent = 'Please select a date and time before continuing.';
+                const container = document.getElementById('step-3');
+                container.appendChild(notice);
+                return;
+            }
+
+            showStep(3);
+        });
+
+        document.getElementById('prev-step-4').addEventListener('click', () => {
+            showStep(2);
+        });
+
+        document.getElementById('confirm-booking').addEventListener('click', () => {
+            // Validate user details before confirming
+            const name = document.getElementById('booking-name').value.trim();
+            const email = document.getElementById('booking-email').value.trim();
+            const phone = document.getElementById('booking-phone').value.trim();
+            const existingNotice = document.getElementById('details-notice');
+            if (existingNotice) existingNotice.remove();
+
+            const errors = [];
+            if (!name) errors.push('Full name');
+            if (!email || !/^\S+@\S+\.\S+$/.test(email)) errors.push('A valid email');
+            if (!phone) errors.push('Phone number');
+
+            if (errors.length) {
+                const notice = document.createElement('div');
+                notice.id = 'details-notice';
+                notice.className = 'text-red-600 mt-3';
+                notice.innerHTML = 'Please provide: ' + errors.join(', ');
+                const container = document.getElementById('step-4');
+                container.insertBefore(notice, container.firstChild);
+                return;
+            }
+
+            showStep(4);
+        });
+        
+        // Contact form submission
+        document.getElementById('contact-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            
+            // Simulate form submission
+            setTimeout(() => {
+                document.getElementById('form-success').classList.remove('hidden');
+                e.target.reset();
+            }, 1000);
+        });
+
+        // Sync booking inputs to summary
+        const postcodeInput = document.querySelector('#step-2 input[type="text"]');
+        const bookingLocationEl = document.getElementById('booking-location');
+        if (postcodeInput) {
+            postcodeInput.addEventListener('input', (e) => {
+                if (bookingLocationEl) bookingLocationEl.textContent = e.target.value || 'Not provided';
+            });
+        }
+
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', () => {
+                // mark selection
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('bg-accent','text-white'));
+                slot.classList.add('bg-accent','text-white');
+                const bookingTimeEl = document.getElementById('booking-time');
+                if (bookingTimeEl) bookingTimeEl.textContent = slot.textContent.trim();
+            });
+        });
+
+        // Calendar rendering & selection for Step 3
+        const bookingDateEl = document.getElementById('booking-date');
+        (function setupCalendar(){
+            const calendarEl = document.getElementById('calendar');
+            const monthYearEl = document.getElementById('calendar-month-year');
+            const prevBtn = document.getElementById('calendar-prev');
+            const nextBtn = document.getElementById('calendar-next');
+
+            if (!calendarEl || !monthYearEl) return;
+
+            const today = new Date();
+            let viewYear = today.getFullYear();
+            let viewMonth = today.getMonth(); // 0-indexed
+
+            function render() {
+                calendarEl.innerHTML = '';
+                const firstOfMonth = new Date(viewYear, viewMonth, 1);
+                const lastOfMonth = new Date(viewYear, viewMonth + 1, 0);
+                const startDay = firstOfMonth.getDay(); // 0 (Sun) - 6 (Sat)
+
+                // header weekdays
+                const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+                days.forEach(d => {
+                    const hd = document.createElement('div');
+                    hd.className = 'text-center font-medium text-gray-500 py-2';
+                    hd.textContent = d;
+                    calendarEl.appendChild(hd);
+                });
+
+                // empty slots before first day
+                for (let i = 0; i < startDay; i++) {
+                    const empty = document.createElement('div');
+                    empty.className = 'text-center py-2 text-gray-300';
+                    calendarEl.appendChild(empty);
+                }
+
+                // days of month
+                for (let d = 1; d <= lastOfMonth.getDate(); d++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'text-center py-2 rounded-full cursor-pointer hover:bg-gray-100';
+                    cell.textContent = d;
+
+                    const cellDate = new Date(viewYear, viewMonth, d);
+                    // disable past dates
+                    if (cellDate.setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+                        cell.classList.remove('cursor-pointer','hover:bg-gray-100');
+                        cell.classList.add('text-gray-400','opacity-50');
+                        cell.title = 'Unavailable';
+                    } else {
+                        cell.addEventListener('click', () => {
+                            // clear previous selection
+                            calendarEl.querySelectorAll('.bg-accent').forEach(c => c.classList.remove('bg-accent','text-white'));
+                            cell.classList.add('bg-accent','text-white');
+                            // format booking date (e.g. 8 Sep 2025)
+                            const formatted = cellDate.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
+                            if (bookingDateEl) bookingDateEl.textContent = formatted;
+                        });
+                    }
+
+                    calendarEl.appendChild(cell);
+                }
+
+                // show month and year
+                monthYearEl.textContent = firstOfMonth.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+            }
+
+            prevBtn.addEventListener('click', () => {
+                // Don't allow navigating to months entirely in the past (if last day of month < today)
+                const prevMonth = new Date(viewYear, viewMonth - 1, 1);
+                const lastOfPrev = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0);
+                if (lastOfPrev.setHours(0,0,0,0) < new Date().setHours(0,0,0,0)) {
+                    // prevent navigating to full past months
+                    return;
+                }
+                viewMonth -= 1;
+                if (viewMonth < 0) { viewMonth = 11; viewYear -= 1; }
+                render();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                viewMonth += 1;
+                if (viewMonth > 11) { viewMonth = 0; viewYear += 1; }
+                render();
+            });
+
+            // initial render
+            render();
+        })();
+
+        // Service details modal
+        // Insert modal container at end of body
+        const modalHtml = `
+        <div id="service-modal" class="fixed inset-0 bg-black bg-opacity-60 hidden items-center justify-center z-50">
+            <div class="bg-white rounded-lg max-w-6xl w-full mx-4 overflow-hidden max-h-[90vh] shadow-xl">
+                <div class="bg-accent p-6 flex justify-between items-start">
+                    <div>
+                        <h3 id="modal-title" class="text-3xl font-extrabold text-primary">Service title</h3>
+                        <p id="modal-sub" class="text-primary/80 mt-2 text-lg">Short subtitle or intro</p>
+                    </div>
+                    <button id="modal-close" class="bg-white text-accent w-10 h-10 rounded-full flex items-center justify-center text-2xl hover:scale-105 shadow-sm" aria-label="Close modal">&times;</button>
+                </div>
+                <div class="p-6 overflow-auto bg-white" style="max-height:calc(90vh - 120px);">
+                    <div id="modal-images" class="flex gap-4 mb-6 overflow-x-auto py-2"></div>
+                    <div id="modal-desc" class="text-gray-700 prose max-w-none"></div>
+                </div>
+                <!-- footer removed; close available via top-right × -->
+            </div>
+        </div>
+        `;
+
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const detailsMap = {
+            // Painting
+            'painting-interior': {
+                title: 'Interior Painting',
+                sub: 'Walls, ceilings, trims and decorative finishes delivered to a high standard.',
+                images: [
+                    'static/images/images/painting/interior/paint_interior01.jpg',
+                    'static/images/images/painting/interior/paint_interior02.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">What we include</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Site protection (furniture & floors covered)</li>\
+                         <li>Surface preparation: fill, sand & prime</li>\
+                         <li>Two coats of premium emulsion/finish</li>\
+                         <li>Skirting, doors & trims finished neatly</li>\
+                       </ul>\
+                       <h4 class="text-lg font-semibold mb-2">Typical timeline</h4>\
+                       <p class="mb-4">Small room: 1 day · Large room: 1–2 days · Whole-house: quoted per project</p>\
+                       <h4 class="text-lg font-semibold mb-2">Why choose us</h4>\
+                       <ul class="list-disc pl-5">\
+                         <li>Experienced decorators with attention to detail</li>\
+                         <li>High-quality branded paints (available on request)</li>\
+                         <li>Clean, insured and punctual teams</li>\
+                       </ul>'
+            },
+            'painting-exterior': {
+                title: 'Exterior Painting',
+                sub: 'Weather-resistant coatings for facades, doors and outdoor woodwork.',
+                images: [
+                    'static/images/images/painting/exterior/img1.jpg',
+                    'static/images/images/painting/exterior/img2.jpg',
+                    'static/images/images/painting/exterior/img3.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Services included</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Pressure washing and surface preparation</li>\
+                         <li>Rust treatment and priming where needed</li>\
+                         <li>Durable top coats: masonry, wood & metal systems</li>\
+                       </ul>\
+                       <h4 class="text-lg font-semibold mb-2">Time & access</h4>\
+                       <p class="mb-4">Most small facades completed in 1–3 days; scaffolding or access may be required for larger jobs (quoted).</p>'
+            },
+            'painting-commercial': {
+                title: 'Commercial Painting',
+                sub: 'Professional painting for shops, offices and industrial spaces with minimal disruption.',
+                images: [
+                    'static/images/images/painting/commercial/paint_office_interior.jpg',
+                    'static/images/images/painting/commercial/paint_office_interior2.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Commercial offering</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Out-of-hours work to avoid business disruption</li>\
+                         <li>Multi-trade coordination and project management</li>\
+                         <li>Health & safety and risk assessments supplied</li>\
+                       </ul>\
+                       <p>We provide staged works and clear communication for larger projects.</p>'
+            },
+            'painting-restoration': {
+                title: 'Restoration & Repair',
+                sub: 'Specialist repair works for damaged or historic properties.',
+                images: [
+                    'static/images/images/painting/restoration/img.webp'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">What this covers</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Plaster repairs, consolidation and repaint</li>\
+                         <li>Matching historic paints and finishes</li>\
+                         <li>Specialist contractors engaged where required</li>\
+                       </ul>'
+            },
+            // Flooring
+            'flooring-carpets': {
+                title: 'Carpets',
+                sub: 'Supply, cutting and professional fit for any room.',
+                images: [
+                    'static/images/images/flooring/carpets/carpets.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Included</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Professional measuring and templating</li>\
+                         <li>Edge finishing and gripper installation</li>\
+                         <li>Optional underlay upgrades and stain protection</li>\
+                       </ul>\
+                       <h4 class="text-lg font-semibold mb-2">Lead times & advice</h4>\
+                       <p class="mb-4">Typical install within 5–10 working days after order depending on stock and site access.</p>'
+            },
+            'flooring-vinyl': {
+                title: 'Vinyl Flooring',
+                sub: 'Waterproof, hygienic and easy-to-maintain vinyl floors.',
+                images: [
+                    'static/images/images/flooring/vinyl flooring/vinyl.jpg',
+                    'static/images/images/flooring/vinyl flooring/vinyl2.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Benefits</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Waterproof and suited to kitchens & bathrooms</li>\
+                         <li>Wide selection of textures and safety finishes</li>\
+                       </ul>'
+            },
+            'flooring-laminate': {
+                title: 'Laminate Flooring',
+                sub: 'Cost-effective, attractive laminate planks with fast installation.',
+                images: [
+                    'static/images/images/flooring/Laminate Flooring/vinylflooring.jpg',
+                    'static/images/images/flooring/Laminate Flooring/vinylflooring2.jpg',
+                    'static/images/images/flooring/Laminate Flooring/vinylflooring3.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Why laminate</h4>\
+                       <p class="mb-4">Laminate offers a realistic wood look at a lower price point and installs quickly with click-fit systems.</p>'
+            },
+            'flooring-engineered': {
+                title: 'Engineered Wood',
+                sub: 'Stable timber flooring suitable for many environments.',
+                images: [
+                    'static/images/images/flooring/Engineered Wood Flooring/d5-render-KSljCphBZ6Q-unsplash.jpg',
+                    'static/images/images/flooring/Engineered Wood Flooring/guzman-barquin-6nuVhII8pZA-unsplash.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Features</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Real wood top layer with plywood backing</li>\
+                         <li>Compatible with underfloor heating (select ranges)</li>\
+                       </ul>'
+            },
+            'flooring-herringbone': {
+                title: 'Herringbone Flooring',
+                sub: 'Patterned installation for a premium finish.',
+                images: [
+                    'static/images/images/flooring/Herringbone Flooring/chat-lam-196279_vintage_chateau_herringbone_charme_light_natural_light_almond_oak_laminate_flooring_1.webp',
+                    'static/images/images/flooring/Herringbone Flooring/goodrich-espresso-oak-herringbone-wood-flooring-dark-resize.webp'
+                ],
+                desc: '<p>We offer precision laying for herringbone or chevron patterns with bespoke finishing.</p>'
+            },
+            'flooring-all': {
+                title: 'All Types of Flooring',
+                sub: 'Comprehensive flooring service from supply to finish.',
+                images: [
+                    'static/images/images/flooring/All types of flooring/ernys-VYn_OPplC34-unsplash.jpg'
+                ],
+                desc: '<p>Turnkey service including site survey, supply, install and aftercare options.</p>'
+            },
+            // Cleaning
+            'cleaning-tenancy': {
+                title: 'End of Tenancy Cleaning',
+                sub: 'Comprehensive move-out cleans to help you pass inspections.',
+                images: [
+                    'static/images/images/cleaning/Tenancy Cleaning/cdc-VRpjDw3WqqI-unsplash.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">What we do</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Full kitchen deep clean including oven (optional)</li>\
+                         <li>Bathroom sanitisation, descaling and grout care</li>\
+                         <li>Carpet spot treatment and vacuuming</li>\
+                       </ul>\
+                       <p>We provide before/after photos on request and can tailor a checklist to landlord requirements.</p>'
+            },
+            'cleaning-home': {
+                title: 'Home Cleaning',
+                sub: 'Regular or one-off domestic cleaning solutions.',
+                images: [
+                    'static/images/images/cleaning/Home Cleaning/istockphoto-2162243254-612x612.webp'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Packages</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Weekly / fortnightly / monthly recurring plans</li>\
+                         <li>One-off deep cleans and spring cleans available</li>\
+                       </ul>'
+            },
+            'cleaning-deep': {
+                title: 'Deep & Special Cleaning',
+                sub: 'Heavy-duty cleaning for builders, renovations and difficult jobs.',
+                images: [
+                    'static/images/images/cleaning/Deep & Special Cleaning/istockphoto-1315150370-612x612.webp'
+                ],
+                desc: '<p>Includes specialist equipment, stain extraction and targeted treatments. Site-specific quotes provided.</p>'
+            },
+            'cleaning-carpet': {
+                title: 'Carpet Care',
+                sub: 'Shampoo, steam and stain removal services.',
+                images: [
+                    'static/images/images/cleaning/Carpet Care/istockphoto-2214252212-612x612.webp'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Services</h4>\
+                       <ul class="list-disc pl-5 mb-4">\
+                         <li>Hot water extraction (steam clean)</li>\
+                         <li>Stain and odour treatment</li>\
+                         <li>Protective fibre treatments</li>\
+                       </ul>'
+            },
+            'cleaning-office': {
+                title: 'Office & Commercial Cleaning',
+                sub: 'Scheduled cleaning for workplaces and events.',
+                images: [
+                    'static/images/images/cleaning/Office & Commercial Cleaning/niloy-kumar-P3PNrDg3cts-unsplash.jpg',
+                    'static/images/images/cleaning/Office & Commercial Cleaning/point3d-commercial-imaging-ltd-qVIDQ-jCMFw-unsplash.jpg'
+                ],
+                desc: '<p>Flexible contracts, daily or periodic cleans, and event turnaround services. We can supply COSHH and risk assessments on request.</p>'
+            },
+            'cleaning-laundry': {
+                title: 'Laundry Services',
+                sub: 'Ironing, wash & dry and optional collection/delivery.',
+                images: [
+                    'static/images/images/cleaning/Laundry Services/istockphoto-171315717-612x612.webp'
+                ],
+                desc: '<p>Convenient add-on service or standalone. Pricing depends on quantity and turnaround required.</p>'
+            }
+            ,
+            // Decoration
+            /* decoration entries removed (no longer used) */
+            // Decoration (local images)
+            'decoration-full': {
+                title: 'Full Decoration',
+                sub: 'Comprehensive decoration packages for homes and businesses.',
+                images: [
+                    'static/images/images/decoration/Full Decoration/spacejoy-IH7wPsjwomc-unsplash.jpg',
+                    'static/images/images/decoration/Full Decoration/spacejoy-vPKNB_gc23Q-unsplash.jpg'
+                ],
+                desc: '<h4 class="text-lg font-semibold mb-2">Scope</h4><p class="mb-4">Complete decoration packages including planning, surfaces prep, painting, and final finishes for an entire property or chosen rooms.</p>'
+            },
+            'decoration-plaster': {
+                title: 'Filling & Plastering',
+                sub: 'Skim plastering, patch repairs and finishing for paint-ready surfaces.',
+                images: [
+                    'static/images/images/decoration/Filling & Plastering/construction-worker-plastering-and-smoothing-concrete-wall.webp',
+                    'static/images/images/decoration/Filling & Plastering/worker-plastering-concrete-floor-worker-wearing-orange-glove-blue-shirt-plastering-concrete-floor-167614223.webp'
+                ],
+                desc: '<p>Skim plastering and specialist repairs to achieve smooth, durable surfaces ready for decoration.</p>'
+            },
+            'decoration-wallpaper': {
+                title: 'Wallpaper Removal & Hanging',
+                sub: 'Careful removal and professional hanging of wallpapers.',
+                images: [
+                    'static/images/images/decoration/Wallpaper Removal & Hanging/CopyofVintagePalm_Green_ILW50955_Roomset.webp',
+                    'static/images/images/decoration/Wallpaper Removal & Hanging/versailles.webp',
+                    'static/images/images/decoration/Wallpaper Removal & Hanging/wow119-marian-floral-wallpaper-green-ae2.webp'
+                ],
+                desc: '<p>From adhesive removal to precision hanging and pattern matching, we deliver crisp seams and beautiful results.</p>'
+            },
+            'decoration-touch': {
+                title: 'Decorative Touches',
+                sub: 'Feature walls, textures and specialist finishes.',
+                images: [
+                    'static/images/images/decoration/Decorative Touches/ali-moradi-vz9IbCAXHKQ-unsplash.jpg',
+                    'static/images/images/decoration/Decorative Touches/reisetopia-Y7WfCuz5tn0-unsplash.jpg'
+                ],
+                desc: '<p>Feature walls, textured finishes and specialist detail work to personalise interiors and add character.</p>'
+            },
+        };
+
+        const modal = document.getElementById('service-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSub = document.getElementById('modal-sub');
+        const modalImages = document.getElementById('modal-images');
+        const modalDesc = document.getElementById('modal-desc');
+    const modalClose = document.getElementById('modal-close');
+
+        function openModal(id) {
+            const data = detailsMap[id];
+            if (!data) return;
+            modalTitle.textContent = data.title;
+            modalSub.textContent = data.sub;
+            modalImages.innerHTML = '';
+            // Layout images depending on count: 1 => single large centered, 2 => two large side-by-side, 3+ => grid with max 2 columns
+            const imgs = data.images || [];
+            if (imgs.length === 1) {
+                const src = imgs[0];
+                const img = document.createElement('img');
+                img.src = src.split('/').map(encodeURIComponent).join('/');
+                img.className = 'w-full h-96 md:h-[520px] object-cover rounded-lg mx-auto block';
+                modalImages.appendChild(img);
+            } else if (imgs.length === 2) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 w-full';
+                imgs.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src.split('/').map(encodeURIComponent).join('/');
+                    img.className = 'w-full h-72 md:h-96 object-cover rounded-lg';
+                    wrapper.appendChild(img);
+                });
+                modalImages.appendChild(wrapper);
+            } else if (imgs.length >= 3) {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'grid grid-cols-1 md:grid-cols-2 gap-4 w-full';
+                imgs.forEach(src => {
+                    const img = document.createElement('img');
+                    img.src = src.split('/').map(encodeURIComponent).join('/');
+                    img.className = 'w-full h-56 md:h-80 object-cover rounded-lg';
+                    wrapper.appendChild(img);
+                });
+                modalImages.appendChild(wrapper);
+            }
+                        // Render description and ensure required sections exist
+                        const baseDesc = data.desc || '';
+                        modalDesc.innerHTML = baseDesc;
+
+                        // helper to detect presence of a logical heading (covers small variations)
+                        const hasHeading = (html, patterns) => {
+                                const lower = html.toLowerCase();
+                                return patterns.some(p => lower.includes(p));
+                        };
+
+                        // Check for 'What we include' (allow variants)
+                        const haveInclude = hasHeading(baseDesc, ['what we include', 'included', 'what this covers', 'services included', 'what we do']);
+                        const haveTimeline = hasHeading(baseDesc, ['typical timeline', 'time & access', 'lead times', 'typical install', 'time &']);
+                        const haveWhy = hasHeading(baseDesc, ['why choose us', 'why choose', 'why us', 'why']);
+
+                        // Append missing sections with sensible defaults
+                        let appendHtml = '';
+                        if (!haveInclude) {
+                                appendHtml += '<h4 class="text-lg font-semibold mb-2">What we include</h4>' +
+                                                            '<ul class="list-disc pl-5 mb-4">' +
+                                                                '<li>Site protection and preparation</li>' +
+                                                                '<li>High-quality materials and finishing</li>' +
+                                                                '<li>Clean-up and final inspection</li>' +
+                                                            '</ul>';
+                        }
+                        if (!haveTimeline) {
+                                appendHtml += '<h4 class="text-lg font-semibold mb-2">Typical timeline</h4>' +
+                                                            '<p class="mb-4">Small jobs: typically 1 day · Medium rooms: 1–2 days · Larger or multi-room projects: quoted per project.</p>';
+                        }
+                        if (!haveWhy) {
+                                appendHtml += '<h4 class="text-lg font-semibold mb-2">Why choose us</h4>' +
+                                                            '<ul class="list-disc pl-5">' +
+                                                                '<li>Experienced, insured teams</li>' +
+                                                                '<li>Quality materials and workmanship</li>' +
+                                                                '<li>Clear communication and schedules</li>' +
+                                                            '</ul>';
+                        }
+
+                        if (appendHtml) {
+                            // keep existing content and add defaults at the end
+                            modalDesc.insertAdjacentHTML('beforeend', appendHtml);
+                        }
+
+                        // Post-process and style modal textual sections to make them look richer
+                        (function enhanceModalDetails(){
+                            // Style headings: add icon pill and heading classes
+                            const hs = modalDesc.querySelectorAll('h4');
+                            hs.forEach(h => {
+                                h.classList.add('flex','items-center','gap-3','text-xl','font-semibold','text-primary','mb-3');
+                                if (!h.querySelector('.section-icon')) {
+                                    const icon = document.createElement('span');
+                                    icon.className = 'section-icon inline-flex items-center justify-center w-8 h-8 rounded-full bg-accent text-primary flex-shrink-0';
+                                    icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>';
+                                    h.prepend(icon);
+                                }
+
+                                // Wrap following nodes up to the next h4 into a body container for spacing
+                                if (h.nextElementSibling && !h.nextElementSibling.classList.contains('modal-section-body')) {
+                                    const container = document.createElement('div');
+                                    container.className = 'modal-section-body mb-6';
+                                    let node = h.nextSibling;
+                                    while (node) {
+                                        if (node.nodeType === 1 && node.tagName.toLowerCase() === 'h4') break;
+                                        const next = node.nextSibling;
+                                        container.appendChild(node);
+                                        node = next;
+                                    }
+                                    h.insertAdjacentElement('afterend', container);
+                                }
+                            });
+
+                            // Style lists to have compact rows with check icons
+                            modalDesc.querySelectorAll('ul').forEach(u => {
+                                u.classList.add('pl-0','space-y-2');
+                                u.querySelectorAll('li').forEach(li => {
+                                    li.classList.add('flex','items-start','gap-3','text-gray-700');
+                                    if (!li.querySelector('.li-icon')) {
+                                        const liIcon = document.createElement('span');
+                                        // use a subtle gray dot instead of a blue check
+                                        liIcon.className = 'li-icon inline-block w-2.5 h-2.5 bg-gray-400 rounded-full flex-shrink-0 mt-2 mr-3';
+                                        liIcon.innerHTML = '';
+                                        li.prepend(liIcon);
+                                    }
+                                });
+                            });
+
+                            // Improve paragraph spacing and leading
+                            modalDesc.querySelectorAll('p').forEach(p => {
+                                p.classList.add('mb-3','text-gray-700','leading-relaxed');
+                            });
+                        })();
+
+                        // footer Close removed; only top-right × closes the modal
+
+                        modal.classList.remove('hidden');
+                        modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        document.querySelectorAll('.open-details').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const id = el.dataset.id;
+                openModal(id);
+            });
+        });
+
+        modalClose.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
 </body>
 </html>
