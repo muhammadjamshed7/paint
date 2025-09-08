@@ -218,6 +218,47 @@
             width: 50%;
             overflow: hidden;
         }
+        /* Instagram-like feed preview: limit to ~3 rows, fade and reveal */
+        .instagram-preview {
+            position: relative;
+            overflow: hidden;
+            max-height: calc( (18rem) * 3 + 1.5rem ); /* 3 rows of .h-56 plus gaps (approx) */
+            transition: max-height 400ms ease;
+        }
+        .instagram-preview.expanded {
+            max-height: 2000px; /* large enough to show all */
+        }
+        .instagram-fade {
+            pointer-events: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 5.5rem;
+            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+            transition: opacity 200ms ease;
+        }
+        .instagram-preview.expanded + .instagram-fade { opacity: 0; visibility: hidden; }
+        .see-more-btn {
+            display: inline-block;
+            margin: 1rem auto 0;
+            background: #ecc94b; /* yellow accent */
+            color: #000; /* black text */
+            padding: 0.6rem 1rem;
+            border-radius: 999px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            transition: transform 0.12s ease;
+        }
+        .see-more-btn:hover { filter: brightness(0.98); transform: translateY(-1px); }
+        .see-more-btn:active { transform: translateY(1px); }
+    /* Modal for viewing images */
+    #imageModal { display: none; }
+    #imageModal.items-center { display: flex; }
+    #imageModal.show { display: flex; }
+    #imageModal .bg-black { background-color: rgba(0,0,0,0.6); }
+    #imageModalImg { display: block; }
         
         .slider-handle {
             position: absolute;
@@ -1874,6 +1915,58 @@
                 </div>
 
             </div>
+            <!-- Instagram-like feed of successful projects -->
+            <div id="instagram-feed" class="mt-20">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">More Successful Projects</h2>
+                <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">A quick visual feed of recent completed jobs — tap to view.</p>
+
+                <div class="instagram-preview" id="instagramPreview">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="instagramGrid">
+                    <!-- All real projects from static/images/real-projects -->
+                    <a href="static/images/real-projects/64e50157d7076-1692729687.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project">
+                        <div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64e50157d7076-1692729687.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+                    </a>
+                    <a href="static/images/real-projects/64f196fa4695b-1693554426.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64f196fa4695b-1693554426.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/64feaa3a52b9d-1694411322.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64feaa3a52b9d-1694411322.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/64feaa44e1d9c-1694411332.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64feaa44e1d9c-1694411332.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/64feaa4cb2a0d-1694411340.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64feaa4cb2a0d-1694411340.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/64feaa62189b8-1694411362.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/64feaa62189b8-1694411362.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/655f0bc712f51-1700727751.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/655f0bc712f51-1700727751.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/655f23fd7d301-1700733949.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/655f23fd7d301-1700733949.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/6566f9490ebba-1701247305.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/6566f9490ebba-1701247305.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/6566f96633e7c-1701247334.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/6566f96633e7c-1701247334.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/6566fa8ac09a6-1701247626.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/6566fa8ac09a6-1701247626.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/6566fb3b5e3fd-1701247803.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/6566fb3b5e3fd-1701247803.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/66976c9594fd1-1721199765.png" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/66976c9594fd1-1721199765.png" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/66c87418bf64e-1724412952.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/66c87418bf64e-1724412952.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/66c87435a27a8-1724412981.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/66c87435a27a8-1724412981.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/66c87464edb59-1724413028.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/66c87464edb59-1724413028.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/679359f11547d-1737710065.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/679359f11547d-1737710065.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/679359f84a127-1737710072.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/679359f84a127-1737710072.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/679359fe61852-1737710078.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/679359fe61852-1737710078.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/67935a04ba82c-1737710084.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/67935a04ba82c-1737710084.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/67935a0e26a2c-1737710094.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/67935a0e26a2c-1737710094.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/67935a133db24-1737710099.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/67935a133db24-1737710099.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/67935a1b75223-1737710107.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/67935a1b75223-1737710107.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/686bba1842c02-1751890456.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/686bba1842c02-1751890456.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    <a href="static/images/real-projects/686bba35e5ace-1751890485.jpg" class="group block bg-white rounded-lg overflow-hidden shadow-sm relative gallery-card" title="Project"><div class="relative h-56 md:h-64 lg:h-72 overflow-hidden"><img src="static/images/real-projects/686bba35e5ace-1751890485.jpg" alt="Project" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div></a>
+                    </div>
+                </div>
+                <div class="instagram-fade" id="instagramFade" aria-hidden="true"></div>
+                <div class="text-center">
+                    <button id="instagramToggle" class="see-more-btn" aria-expanded="false">See more</button>
+                </div>
+                <!-- Image modal for viewing project photos -->
+                <div id="imageModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+                    <div id="imageModalOverlay" class="absolute inset-0 bg-black bg-opacity-60"></div>
+                    <div class="relative max-w-4xl w-full max-h-[90vh] bg-white rounded shadow-lg overflow-hidden">
+                        <button id="imageModalClose" class="absolute top-3 right-3 z-10 bg-white text-gray-800 rounded-full p-2 shadow" aria-label="Close image">✕</button>
+                        <div class="flex items-center justify-center bg-black">
+                            <img id="imageModalImg" src="" alt="Project image" class="max-w-full max-h-[85vh] object-contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
     
@@ -2511,6 +2604,61 @@
                 }
             });
         });
+
+        // Instagram feed "See more" toggle (show 3 rows preview then expand)
+        (function() {
+            const preview = document.getElementById('instagramPreview');
+            const toggle = document.getElementById('instagramToggle');
+            const fade = document.getElementById('instagramFade');
+            const grid = document.getElementById('instagramGrid');
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('imageModalImg');
+            const modalOverlay = document.getElementById('imageModalOverlay');
+            const modalClose = document.getElementById('imageModalClose');
+
+            if (!preview || !toggle) return;
+
+            // See more toggle
+            toggle.addEventListener('click', () => {
+                const expanded = preview.classList.toggle('expanded');
+                toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+                toggle.textContent = expanded ? 'See less' : 'See more';
+                if (fade) fade.style.opacity = expanded ? '0' : '1';
+                if (!expanded) preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            // Open modal when clicking an image link inside the instagram grid
+            if (grid) {
+                grid.querySelectorAll('a').forEach(a => {
+                    a.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const src = a.getAttribute('href') || a.querySelector('img')?.src;
+                        if (!src) return;
+                        if (modal && modalImg) {
+                            modalImg.src = src;
+                            modal.classList.add('show');
+                            modal.classList.remove('hidden');
+                            // ensure visible
+                            modal.style.display = 'flex';
+                        }
+                    });
+                });
+            }
+
+            // Close modal helper
+            function closeModal() {
+                if (!modal) return;
+                modal.classList.remove('show');
+                modal.style.display = 'none';
+                if (modalImg) modalImg.src = '';
+            }
+
+            if (modalOverlay) modalOverlay.addEventListener('click', closeModal);
+            if (modalClose) modalClose.addEventListener('click', closeModal);
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeModal();
+            });
+        })();
 
         // Color palette selector
         const colorSwatches = document.querySelectorAll('.color-swatch');
