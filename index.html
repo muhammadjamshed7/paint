@@ -42,6 +42,7 @@
             height: 80vh;
             position: relative;
             overflow: hidden;
+            z-index: 0; /* ensure hero stays below main content stacking by default */
         }
         .hero-slide {
             position: absolute;
@@ -54,14 +55,31 @@
             -webkit-transition: opacity 1200ms ease-in-out;
         }
         .hero-slide.active { opacity: 1; }
+        /* Ensure hero overlay does not visually cover subsequent sections */
+        .hero-banner > .hero-overlay {
+            z-index: 5; /* overlay inside hero */
+            position: absolute;
+            pointer-events: auto;
+        }
+
+        /* Give main sections (like Services) a higher stacking position so overlays can't spill over */
+        #services {
+            position: relative;
+            z-index: 10;
+            background: #ffffff; /* explicitly ensure white background */
+        }
         
+        /* Make service cards larger and center them visually */
         .service-card {
             transform: translateY(0);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            border: 1px solid transparent;
+            transition: all 0.32s cubic-bezier(0.2, 0.9, 0.2, 1);
+            box-shadow: 0 14px 40px rgba(2,6,23,0.08);
+            border: 1px solid rgba(15,23,42,0.04);
             position: relative;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
         
         .service-card::before {
@@ -381,6 +399,18 @@
                 margin: 0.5rem;
                 max-width: calc(100vw - 1rem);
             }
+        }
+
+        /* Larger screens: make service cards more prominent */
+        @media (min-width: 1024px) {
+            .service-card { max-width: 42rem; }
+            .service-card > .relative { height: 320px !important; }
+        }
+
+        @media (min-width: 1280px) {
+            .service-card { max-width: 48rem; }
+            .service-card > .relative { height: 360px !important; }
+            .reviews-section { padding: 4rem 0; }
         }
         
         /* Small mobile phones */
@@ -773,7 +803,6 @@
                         <div class="dropdown-menu absolute hidden bg-white text-gray-800 pt-2 shadow-xl rounded w-48">
                             <a href="#painting-details" class="block px-4 py-2 hover:bg-gray-100">Painting</a>
                             <a href="#flooring-details" class="block px-4 py-2 hover:bg-gray-100">Flooring</a>
-                            <a href="#cleaning-details" class="block px-4 py-2 hover:bg-gray-100">Cleaning</a>
                             <a href="#decoration-details" class="block px-4 py-2 hover:bg-gray-100">Decoration</a>
                         </div>
                     </div>
@@ -793,7 +822,6 @@
                     <div class="dropdown-content hidden pl-4">
                         <a href="#painting-details" class="block py-2 text-white hover:text-accent">Painting</a>
                         <a href="#flooring-details" class="block py-2 text-white hover:text-accent">Flooring</a>
-                        <a href="#cleaning-details" class="block py-2 text-white hover:text-accent">Cleaning</a>
                         <a href="#decoration-details" class="block py-2 text-white hover:text-accent">Decoration</a>
                     </div>
                 </div>
@@ -811,7 +839,7 @@
         <img class="hero-slide" src="https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Hero 2">
     <img class="hero-slide" src="static/images/assets/Home%20Office/home-office-white.jpg" alt="Hero 3">
         <img class="hero-slide" src="https://images.unsplash.com/photo-1488805990569-3c9e1d76d51c?auto=format&fit=crop&w=1470&q=80" alt="Hero 4">
-        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center">
+        <div class="hero-overlay absolute inset-0 bg-black bg-opacity-40 flex items-center">
             <div class="container mx-auto px-4 text-white">
                 <h1 class="text-4xl md:text-6xl font-display font-bold mb-4">Transform Your Space</h1>
                 <p class="text-xl md:text-2xl mb-8 font-sans">Professional painting, flooring, cleaning & decorating services across the UK</p>
@@ -832,11 +860,11 @@
             <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Our Services</h2>
             <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional home improvement services delivered with expertise, quality materials, and attention to detail across the UK</p>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-stretch">
                 <!-- Painting Service Card -->
-                <div id="painting" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left">
-                    <div class="relative overflow-hidden">
-                        <img src="static/images/images/painting/interior/paint_interior02.jpg" alt="Painting Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                    <div id="painting" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left w-full max-w-xl">
+                    <div class="relative overflow-hidden" style="height:260px;">
+                        <img src="static/images/images/painting/interior/paint_interior02.jpg" alt="Painting Services" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-6">
@@ -844,7 +872,7 @@
                             <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
                                 <i class="fas fa-paint-roller text-accent text-lg"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-primary">Painting Services</h3>
+                            <h3 class="text-2xl font-semibold text-primary">Painting Services</h3>
                         </div>
                         <p class="text-gray-600 mb-4 leading-relaxed">Professional interior and exterior painting for homes and businesses across the UK.</p>
                         <a href="#painting-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
@@ -855,9 +883,9 @@
                 </div>
                 
                 <!-- Flooring Service Card -->
-                <div id="flooring" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-100">
-                    <div class="relative overflow-hidden">
-                        <img src="static/images/images/flooring/Engineered Wood Flooring/d5-render-KSljCphBZ6Q-unsplash.jpg" alt="Flooring Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                <div id="flooring" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-100 w-full max-w-xl">
+                    <div class="relative overflow-hidden" style="height:260px;">
+                        <img src="static/images/images/flooring/Engineered Wood Flooring/d5-render-KSljCphBZ6Q-unsplash.jpg" alt="Flooring Services" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-6">
@@ -865,7 +893,7 @@
                             <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
                                 <i class="fas fa-th-large text-accent text-lg"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-primary">Flooring Services</h3>
+                            <h3 class="text-2xl font-semibold text-primary">Flooring Services</h3>
                         </div>
                         <p class="text-gray-600 mb-4 leading-relaxed">Quality flooring installation including carpets, vinyl, laminate and wood flooring.</p>
                         <a href="#flooring-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
@@ -875,31 +903,11 @@
                     </div>
                 </div>
                 
-                <!-- Cleaning Service Card -->
-                <div id="cleaning" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-200">
-                    <div class="relative overflow-hidden">
-                        <img src="static/images/images/cleaning/Carpet Care/istockphoto-2214252212-612x612.webp" alt="Cleaning Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
-                                <i class="fas fa-broom text-accent text-lg"></i>
-                            </div>
-                            <h3 class="text-xl font-semibold text-primary">Cleaning Services</h3>
-                        </div>
-                        <p class="text-gray-600 mb-4 leading-relaxed">Professional cleaning for homes, offices and end-of-tenancy with guaranteed results.</p>
-                        <a href="#cleaning-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
-                            Learn More 
-                            <i class="fas fa-arrow-right ml-2 text-sm group-hover:translate-x-1 transition-transform"></i>
-                        </a>
-                    </div>
-                </div>
                 
                 <!-- Decoration Service Card -->
-                <div id="decoration" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-300">
-                    <div class="relative overflow-hidden">
-                        <img src="static/images/images/decoration/Decorative Touches/ali-moradi-vz9IbCAXHKQ-unsplash.jpg" alt="Decoration Services" class="w-full h-48 object-cover transition-transform duration-300 hover:scale-110">
+                <div id="decoration" class="service-card bg-white rounded-xl overflow-hidden animate-slide-in-left animate-delay-300 w-full max-w-xl">
+                    <div class="relative overflow-hidden" style="height:260px;">
+                        <img src="static/images/images/decoration/Decorative Touches/ali-moradi-vz9IbCAXHKQ-unsplash.jpg" alt="Decoration Services" class="w-full h-full object-cover transition-transform duration-300 hover:scale-110">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
                     </div>
                     <div class="p-6">
@@ -907,7 +915,7 @@
                             <div class="w-10 h-10 bg-accent/10 rounded-lg flex items-center justify-center mr-3">
                                 <i class="fas fa-palette text-accent text-lg"></i>
                             </div>
-                            <h3 class="text-xl font-semibold text-primary">Decoration Services</h3>
+                            <h3 class="text-2xl font-semibold text-primary">Decoration Services</h3>
                         </div>
                         <p class="text-gray-600 mb-4 leading-relaxed">Full decoration, plastering, wallpapering and decorative finishes for homes and businesses.</p>
                         <a href="#decoration-details" class="inline-flex items-center text-accent font-medium hover:text-primary transition-colors group">
@@ -977,7 +985,7 @@
     <!-- Painting Services Detailed Section -->
     <section id="painting-details" class="py-16 bg-white">
         <div class="container mx-auto px-4">
-            <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Painting Services</h2>
+            <h2 class="text-5xl md:text-6xl font-display font-bold text-center mb-4 section-heading">Painting Services</h2>
             <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional interior and exterior painting solutions with premium materials and expert craftsmanship</p>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
@@ -1120,7 +1128,7 @@
             <!-- Flooring Services Detailed Section -->
             <section id="flooring-details" class="py-16 bg-white">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Flooring Services</h2>
+                    <h2 class="text-5xl md:text-6xl font-display font-bold text-center mb-4 section-heading">Flooring Services</h2>
                     <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Expert flooring installation and repair with quality materials for residential and commercial properties</p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
@@ -1295,161 +1303,13 @@
                 </div>
             </section>
 
-            <!-- Cleaning Services Detailed Section -->
-            <section id="cleaning-details" class="py-16 bg-white">
-                <div class="container mx-auto px-4">
-                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Cleaning Services</h2>
-                    <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Professional cleaning solutions for homes, offices, and commercial spaces with guaranteed results</p>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
-                        <div>
-                            <h3 class="text-2xl font-bold mb-4 text-secondary">Professional & Reliable Cleaning</h3>
-                            <p class="text-gray-600 mb-6">Our cleaning teams deliver thorough, reliable cleaning for homes, offices and properties between tenancies. We tailor each clean to your needs and guarantee high standards.</p>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>End of Tenancy Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>Regular Domestic Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>One-Off Deep Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>Carpet Shampoo Wash</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>After Builders Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>Office & Event Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>Spring Cleaning</span>
-                                </div>
-                                <div class="flex items-start">
-                                    <i class="fas fa-check-circle text-accent mt-1 mr-2"></i>
-                                    <span>Ironing & Washing Service</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="relative h-96">
-                            <img src="static/images/images/cleaning/Carpet Care/istockphoto-2214252212-612x612.webp" alt="Cleaning service" class="w-full h-full object-cover rounded-lg shadow-lg">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-home text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Tenancy Cleaning</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Guaranteed end-of-tenancy cleans to help you secure your deposit back or prepare a property for new occupants.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Guaranteed standards for landlords</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Deep oven & window cleaning options</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Move-in & move-out friendly scheduling</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-tenancy">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-house-damage text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Home Cleaning</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Regular domestic cleaning packages to keep your home fresh, plus seasonal spring cleans when you need them most.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Regular domestic cleaning</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Spring cleans & one-off sessions</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-home">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-broom text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Deep & Special Cleaning</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Thorough deep cleans and specialist services for builders' sites, stubborn grime and difficult-to-reach areas.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>One-off deep cleaning</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>After builders cleaning</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-deep">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-
-                            <!-- removed decoration-related cards that were placed inside cleaning section -->
-
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-soap text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Carpet Care</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Professional carpet shampooing and care to restore pile, remove stains and extend the life of your carpets.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Carpet shampoo wash</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Stain treatment & deodorising</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-carpet">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-building text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Office & Commercial Cleaning</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Reliable cleaning for offices, retail and events to keep commercial spaces hygienic and professional.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Office cleaning</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Event cleaning & turnaround</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-office">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-
-                        <div class="bg-gray-50 p-6 rounded-lg">
-                            <div class="flex items-center mb-4">
-                                <div class="bg-primary text-white p-3 rounded-full mr-4">
-                                    <i class="fas fa-tshirt text-xl"></i>
-                                </div>
-                                <h3 class="text-xl font-bold text-primary">Laundry Services</h3>
-                            </div>
-                            <p class="text-gray-600 mb-4">Ironing and washing services available as a convenient add-on to cleaning bookings or standalone service.</p>
-                            <ul class="space-y-2 mb-4">
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Ironing & washing service</span></li>
-                                <li class="flex items-start"><i class="fas fa-check text-accent mt-1 mr-2 text-sm"></i><span>Collection & delivery available (on request)</span></li>
-                            </ul>
-                            <a href="#" class="text-accent font-medium hover:underline open-details" data-id="cleaning-laundry">More details <i class="fas fa-arrow-right ml-1"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
+            
             <!-- Color Palette Selector -->
             
             <!-- Decoration Services Detailed Section -->
             <section id="decoration-details" class="py-16 bg-white">
                 <div class="container mx-auto px-4">
-                    <h2 class="text-4xl md:text-5xl font-display font-bold text-center mb-4 section-heading">Decoration Services</h2>
+                    <h2 class="text-5xl md:text-6xl font-display font-bold text-center mb-4 section-heading">Decoration Services</h2>
                     <p class="text-lg text-gray-600 text-center mb-12 max-w-2xl mx-auto">Transform your space with professional decoration, plastering, wallpapering, and decorative finishes</p>
 
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
@@ -1643,11 +1503,7 @@
                                     <span class="font-medium text-sm sm:text-base">Flooring Services</span>
                                 </div>
                             </button>
-                            <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="cleaning">
-                                <div class="flex items-center">
-                                    <i class="fas fa-broom text-xl sm:text-2xl text-accent mr-3"></i>
-                                    <span class="font-medium text-sm sm:text-base">Cleaning Services</span>
-                                </div>
+
                             </button>
                             <button class="service-option border border-gray-300 rounded-lg p-3 sm:p-4 text-left hover:border-accent hover:bg-gray-50 transition" data-service="decorating">
                                 <div class="flex items-center">
@@ -1777,9 +1633,7 @@
                     <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="flooring">
                         Flooring
                     </button>
-                    <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="cleaning">
-                        Cleaning
-                    </button>
+
                     <button class="gallery-filter px-3 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 bg-white text-gray-900 hover:bg-gray-50 whitespace-nowrap" data-filter="decorating">
                         Decorating
                     </button>
@@ -2248,7 +2102,7 @@
                             <div class="reviewer-name">Cheryl</div>
                             <div class="review-meta">29 July 2023</div>
                         </div>
-                        <div class="review-service">House Cleaning</div>
+                        <div class="review-service">House Decoration</div>
                         <div class="stars">★★★★★</div>
                         <p class="review-text mt-3">“He did very good job. He was patient and very professional. I will recommend him any time.”</p>
                     </article>
@@ -2258,9 +2112,9 @@
                             <div class="reviewer-name">Gina</div>
                             <div class="review-meta">25 June 2023</div>
                         </div>
-                        <div class="review-service">House Cleaning</div>
+                        <div class="review-service">House Decoration</div>
                         <div class="stars">★★★★★</div>
-                        <p class="review-text mt-3">“Aamer did a fantastic job cleaning my flat. He was Very polite, friendly and very thorough with the job. I’m very satisfied. I will definitely hire him again.”</p>
+                        <p class="review-text mt-3">“Aamer did a fantastic job decorating my flat. He was Very polite, friendly and very thorough with the job. I’m very satisfied. I will definitely hire him again.”</p>
                     </article>
                 </div>
                 <div class="fade-right"></div>
@@ -2381,7 +2235,6 @@
                                         <option value="">Select a service</option>
                                         <option value="painting">Painting Services</option>
                                         <option value="flooring">Flooring Services</option>
-                                        <option value="cleaning">Cleaning Services</option>
                                         <option value="decorating">Decorating Services</option>
                                     </select>
                                 </div>
@@ -2437,7 +2290,7 @@
                     <ul class="space-y-2">
                         <li><a href="#painting" class="hover:text-accent transition">Painting Services</a></li>
                         <li><a href="#flooring" class="hover:text-accent transition">Flooring Services</a></li>
-                        <li><a href="#cleaning" class="hover:text-accent transition">Cleaning Services</a></li>
+                        <li><a href="#decorating" class="hover:text-accent transition">Decorating Services</a></li>
                     </ul>
                 </div>
                 
